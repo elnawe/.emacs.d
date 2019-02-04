@@ -1,4 +1,5 @@
 (use-package dashboard
+  :if (eq system-type 'gnu/linux)
   :preface
   (defun nemacs-dashboard-banner ()
     (setq dashboard-banner-logo-title

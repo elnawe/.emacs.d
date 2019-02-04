@@ -1,4 +1,5 @@
 (use-package ledger-mode
+  :if (eq system-type 'gnu/linux)
   :custom-face
   (ledger-font-payee-cleared-face ((t (:inherit default
                                                 :underline t))))

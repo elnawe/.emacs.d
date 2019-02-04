@@ -1,76 +1,27 @@
 (use-package org
+  :if (eq system-type 'gnu/linux)
   :ensure org-plus-contrib
   :preface
-  (defun nemacs-open-org-inbox-file ()
-    (interactive)
-    (find-file org-default-notes-file))
 
-  (defun nemacs-open-org-todo-file ()
-    (interactive)
-    (find-file "~/Dropbox/orgfiles/todo.org"))
-
-  (defun nemacs-org-mode-hook ()
-    (setq line-spacing 0.2)
-    (flyspell-mode 1)
-    (org-bullets-mode 1)
-    (turn-on-auto-fill))
-  :hook ((org-after-refile-insert . save-buffer)
-         (org-mode                . nemacs-org-mode-hook))
-  :bind (("C-c i" . nemacs-open-org-inbox-file)
-         ("C-c t" . nemacs-open-org-todo-file)
-         ("C-c l" . org-store-link))
   :custom
-  (diary-file "~/Dropbox/orgfiles/calendar/Org Calendar.org")
-  (org-archive-location "~/Dropbox/orgfiles/archive.org::* From %s")
+  (org-archive-location "~/Dropbox/orgmode/archive.org::datetree/")
   (org-blank-before-new-entry '((heading . t) (plain-list-item . t)))
   (org-deadline-warning-days 7)
-  (org-default-notes-file "~/Dropbox/orgfiles/inbox.org")
+  (org-default-notes-file "~/Dropbox/orgmode/inbox.org")
   (org-descriptive-links t)
-  (org-directory "~/Dropbox/orgfiles/")
-  (org-edit-src-content-indentation 0)
-  (org-edit-src-persistent-message nil)
+  (org-directory "~/Dropbox/orgmode/")
   (org-ellipsis "\u21b4")
-  (org-email-link-description-format "Email %c: %s")
+  (org-email-link-description-format "Email %c: [%d] %.15s")
   (org-enforce-todo-checkbox-dependencies t)
   (org-enforce-todo-dependencies t)
   (org-fontify-done-headline t)
   (org-fontify-whole-heading-line t)
   (org-log-done 'time)
   (org-log-into-drawer t)
-  (org-outline-path-complete-in-steps nil)
-  (org-refile-allow-creating-parent-nodes 'confirm)
-  (org-refile-targets `(((,org-default-notes-file "~/Dropbox/orgfiles/someday.org" "~/Dropbox/orgfiles/todo.org") :maxlevel . 3)))
-  (org-refile-use-outline-path t)
-  (org-src-fontify-natively t)
-  (org-src-preserve-indentation t)
-  (org-src-tab-acts-natively t)
-  (org-src-window-setup 'current-window)
   (org-startup-folded nil)
   (org-startup-truncated nil)
-  (org-startup-with-inline-images t)
-  (org-support-shift-select 'always)
-  (org-tag-persistent-alist '(("@errand" . ?e)
-                              ("@home"   . ?h)
-                              ("@office" . ?o)))
-  (org-tags-column 0)
-  (org-todo-keywords '((sequence "TODO(t!)"
-                                 "NEXT(n@)"
-                                 "STARTED"
-                                 "PROJECT"
-                                 "|"
-                                 "DONE(d)"
-                                 "CANCELED(c@)")))
-  (org-todo-keyword-faces '(("TODO"     . org-todo)
-                            ("PROJECT"  . (:foreground "orange"
-                                                       :weight bold))
-                            ("STARTED"  . (:foreground "LimeGreen"
-                                                       :weight bold))
-                            ("NEXT"     . (:foreground "blue"
-                                                       :weight bold))
-                            ("DONE"     . org-done)
-                            ("CANCELED" . (:foreground "red"
-                                                       :underline t
-                                                       :weight bold))))
+  (org-support-shift-always 'always)
+  (org-tags-column -100)
   :custom-face
   (org-ellipsis ((t (:foreground "gold4"
                                  :weight bold))))
@@ -99,11 +50,13 @@
                                         :weight normal))))
   (org-tag ((t (:foreground "MidnightBlue"
                             :weight bold))))
-  (org-todo ((t (:box nil :foreground "red"
+  (org-todo ((t (:box nil
+                      :foreground "red"
                       :underline nil
                       :weight bold)))))
 
 (use-package org-agenda
+  :if (eq system-type 'gnu/linux)
   :ensure nil
   :preface
   (defun nemacs-org-agenda-hook ()
@@ -154,13 +107,9 @@
                                                                     (org-agenda-span 1)
                                                                     (org-deadline-warning-days 7)
                                                                     (org-agenda-start-on-weekday nil)))))))
-  (org-agenda-files '("~/Dropbox/orgfiles/agenda.org"
-                      "~/Dropbox/orgfiles/inbox.org"
-                      "~/Dropbox/orgfiles/someday.org"
-                      "~/Dropbox/orgfiles/todo.org"
-                      "~/Dropbox/orgfiles/calendar/ITX Calendar.org"
-                      "~/Dropbox/orgfiles/calendar/Org Calendar.org"
-                      "~/Dropbox/orgfiles/calendar/Personal Calendar.org"))
+  (org-agenda-files '("~/Dropbox/orgmode/inbox.org"
+                      "~/Dropbox/orgmode/calendar/ITX Calendar.org"
+                      "~/Dropbox/orgmode/calendar/Personal Calendar.org"))
   (org-agenda-inhibit-startup nil)
   (org-agenda-show-future-repeats nil)
   (org-agenda-skip-deadline-if-done nil)
@@ -183,82 +132,42 @@
   (org-time-grid ((t (:foreground "gray50")))))
 
 (use-package org-bullets
+  :if (eq system-type 'gnu/linux)
   :hook (org-mode . org-bullets-mode)
   :custom (org-bullets-bullet-list '("●" "▲" "■" "✶" "◉" "○" "○")))
 
 (use-package org-capture
+  :if (eq system-type 'gnu/linux)
   :ensure nil
   :after org
   :preface
-  (defvar nemacs-org-capture-basic-template "* TODO %^{Task}
-  :PROPERTIES:
-  :CAPTURED: %<%Y-%m-%d %H:%M>
-  :END:")
-  (defvar nemacs-org-capture-link-template "* TODO %^{Task} :#LINK:
-  :PROPERTIES:
-  :CAPTURED: %<%Y-%m-%d %H:%M>
-  :LINK:     %a
-  :END:")
-  (defvar nemacs-org-capture-contact-template "* %(org-contacts-template-name)
-  :PROPERTIES:
-  :ADDRESS:  %^{289 Cleveland St. Brooklyn, 11206 NY, USA}
-  :BIRTHDAY: %^{YYYY-MM-DD}
-  :EMAIL:    %(org-contacts-template-email)
-  :PHONE:    %^{+5493411234567}
-  :NOTE:     %^{Note}
-  :END:")
+  (defvar nemacs-org-capture-quick-template "* TODO %^{Task}")
 
-  (defun nemacs-org-capture (&optional args)
-    (interactive "P")
-    (if current-prefix-arg
-        (org-capture :keys "T")
-      (org-capture :keys "t")))
+  (defvar nemacs-org-capture-basic-template "* TODO %?")
 
   (defun nemacs-org-capture-add-basic-properties ()
+    "Adds basic properties to the captured stuff from org-capture. Runs on `org-capture-finalize-hook'."
     (interactive)
+    (org-set-property "CAPTURED" (format-time-string "[%Y-%m-%d %H:%M]"))
     (org-id-get-create))
 
-  (defun nemacs-org-capture-review-daily ()
+  (defun nemacs-org-capture-quick-task ()
+    "Captures a quick task. Used on `M-m' and across the operating system."
     (interactive)
-    (progn
-      (org-capture nil "rd")
-      (org-capture-finalize t)
-      (org-speed-move-safe 'outline-up-heading)
-      (org-narrow-to-subtree)
-      (org-gcal-fetch)
-      (org-clock-in)))
-
-  (defun nemacs-org-capture-review-weekly ()
-    (interactive)
-    (progn
-      (org-capture nil "rw")
-      (org-capture-finalize t)
-      (org-speed-move-safe 'outline-up-heading)
-      (org-narrow-to-subtree)
-      (org-gcal-fetch)
-      (org-clock-in)))
+    (org-capture :keys "q"))
   :hook (org-capture-before-finalize . nemacs-org-capture-add-basic-properties)
-  :bind (("M-m"     . nemacs-org-capture)
-         ("C-c c"   . org-capture)
-         ("C-c r d" . nemacs-org-capture-review-daily)
-         ("C-c r w" . nemacs-org-capture-review-weekly))
+  :bind (("M-m"   . nemacs-org-capture-quick-task)
+         ("C-c c" . org-capture))
   :custom
-  (org-capture-templates `(("t" "Add TODO Task" entry (file ,org-default-notes-file)
+  (org-capture-templates `(("t" "Add a TODO task" entry (file ,org-default-notes-file)
                             ,nemacs-org-capture-basic-template
-                            :empty-lines 1 :immediate-finish t)
-                           ("T" "Add Linked TODO Task" entry (file ,org-default-notes-file)
-                            ,nemacs-org-capture-link-template
-                            :empty-lines 1 :immediate-finish t)
-                           ("c" "Add Contact" entry (file "~/Dropbox/orgfiles/contacts.org")
-                            ,nemacs-org-capture-contact-template
                             :empty-lines 1)
-
-                           ("rd" "Review: Daily" entry (file+olp+datetree "/tmp/reviews.org")
-                            (file "~/Dropbox/orgfiles/templates/daily-review.template.org"))
-                           ("rw" "Review: Weekly" entry (file+olp+datetree "/tmp/reviews.org")
-                            (file "~/Dropbox/orgfiles/templates/weekly-review.template.org")))))
+                           ("q" "Add Quick TODO task" entry (file ,org-default-notes-file)
+                            ,nemacs-org-capture-quick-template
+                            :empty-lines 1 :immediate-finish t))))
 
 (use-package org-clock
+  :if (eq system-type 'gnu/linux)
   :ensure nil
   :after org
   :custom
@@ -271,35 +180,161 @@
   (org-clock-persist-query-resume nil))
 
 (use-package org-contacts
+  :if (eq system-type 'gnu/linux)
   :ensure nil
   :after org
   :custom
   (org-contacts-birthday-format " %l")
-  (org-contacts-files '("~/Dropbox/orgfiles/contacts.org")))
+  (org-contacts-files '("~/Dropbox/orgmode/contacts.org")))
 
 (use-package org-id
+  :if (eq system-type 'gnu/linux)
   :ensure nil
   :after org
   :custom
-  (org-id-locations-file "~/Dropbox/orgfiles/references/org-ids")
+  (org-id-locations-file "~/Dropbox/orgmode/config/org-ids")
   (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 
 (use-package org-gcal
+  :if (eq system-type 'gnu/linux)
   :after org
   :preface
   (defvar nemacs-org-gcal-auth (auth-source-user-and-password "org-gcal"))
   :custom
   (org-gcal-client-id (car nemacs-org-gcal-auth))
   (org-gcal-client-secret (cadr nemacs-org-gcal-auth))
-  (org-gcal-file-alist '(("nahueljsacchetti@gmail.com" . "~/Dropbox/orgfiles/calendar/Personal Calendar.org")
-                         ("lprcql81oieu0v9kb3kf1utcgg@group.calendar.google.com" . "~/Dropbox/orgfiles/calendar/ITX Calendar.org")))
+  (org-gcal-file-alist '(("nahueljsacchetti@gmail.com" . "~/Dropbox/orgmode/calendar/Personal Calendar.org")
+                         ("lprcql81oieu0v9kb3kf1utcgg@group.calendar.google.com" . "~/Dropbox/orgmode/calendar/ITX Calendar.org")))
   :init
   (setq org-gcal-dir (concat nemacs-cache-dir "org-gcal/")))
 
-(use-package org-journal
-  :after org
-  :custom
-  (org-journal-date-format "%A, %b %e %Y")
-  (org-journal-dir "~/Dropbox/journal/2019/")
-  (org-journal-file-format "%Y%m%d")
-  (org-journal-time-format ""))
+
+;; (use-package org
+;;   :ensure org-plus-contrib
+;;   :preface
+;;   (defun nemacs-open-org-inbox-file ()
+;;     (interactive)
+;;     (find-file org-default-notes-file))
+
+;;   (defun nemacs-open-org-todo-file ()
+;;     (interactive)
+;;     (find-file "~/Dropbox/orgfiles/todo.org"))
+
+;;   (defun nemacs-org-mode-hook ()
+;;     (setq line-spacing 0.2)
+;;     (flyspell-mode 1)
+;;     (org-bullets-mode 1)
+;;     (turn-on-auto-fill))
+;;   :hook ((org-after-refile-insert . save-buffer)
+;;          (org-mode                . nemacs-org-mode-hook))
+;;   :bind (("C-c i" . nemacs-open-org-inbox-file)
+;;          ("C-c t" . nemacs-open-org-todo-file)
+;;          ("C-c l" . org-store-link))
+;;   :custom
+;;   (diary-file "~/Dropbox/orgfiles/calendar/Org Calendar.org")
+;;   (org-edit-src-content-indentation 0)
+;;   (org-edit-src-persistent-message nil)
+
+
+;;   (org-outline-path-complete-in-steps nil)
+;;   (org-refile-allow-creating-parent-nodes 'confirm)
+;;   (org-refile-targets `(((,org-default-notes-file "~/Dropbox/orgfiles/someday.org" "~/Dropbox/orgfiles/todo.org") :maxlevel . 3)))
+;;   (org-refile-use-outline-path t)
+;;   (org-src-fontify-natively t)
+;;   (org-src-preserve-indentation t)
+;;   (org-src-tab-acts-natively t)
+;;   (org-src-window-setup 'current-window)
+
+;;   (org-tag-persistent-alist '(("@errand" . ?e)
+;;                               ("@home"   . ?h)
+;;                               ("@office" . ?o)))
+;;   (org-todo-keywords '((sequence "TODO(t!)"
+;;                                  "NEXT(n@)"
+;;                                  "STARTED"
+;;                                  "PROJECT"
+;;                                  "|"
+;;                                  "DONE(d)"
+;;                                  "CANCELED(c@)")))
+;;   (org-todo-keyword-faces '(("TODO"     . org-todo)
+;;                             ("PROJECT"  . (:foreground "orange"
+;;                                                        :weight bold))
+;;                             ("STARTED"  . (:foreground "LimeGreen"
+;;                                                        :weight bold))
+;;                             ("NEXT"     . (:foreground "blue"
+;;                                                        :weight bold))
+;;                             ("DONE"     . org-done)
+;;                             ("CANCELED" . (:foreground "red"
+;;                                                        :underline t
+;;                                                        :weight bold))))
+
+;; (use-package org-capture
+;;   :ensure nil
+;;   :after org
+;;   :preface
+;;   (defvar nemacs-org-capture-basic-template "* TODO %^{Task}
+;;   :PROPERTIES:
+;;   :CAPTURED: %<%Y-%m-%d %H:%M>
+;;   :END:")
+;;   (defvar nemacs-org-capture-link-template "* TODO %^{Task} :#LINK:
+;;   :PROPERTIES:
+;;   :CAPTURED: %<%Y-%m-%d %H:%M>
+;;   :LINK:     %a
+;;   :END:")
+;;   (defvar nemacs-org-capture-contact-template "* %(org-contacts-template-name)
+;;   :PROPERTIES:
+;;   :ADDRESS:  %^{289 Cleveland St. Brooklyn, 11206 NY, USA}
+;;   :BIRTHDAY: %^{YYYY-MM-DD}
+;;   :EMAIL:    %(org-contacts-template-email)
+;;   :PHONE:    %^{+5493411234567}
+;;   :NOTE:     %^{Note}
+;;   :END:")
+
+;;   (defun nemacs-org-capture (&optional args)
+;;     (interactive "P")
+;;     (if current-prefix-arg
+;;         (org-capture :keys "T")
+;;       (org-capture :keys "t")))
+
+;;   (defun nemacs-org-capture-add-basic-properties ()
+;;     (interactive)
+;;     (org-id-get-create))
+
+;;   (defun nemacs-org-capture-review-daily ()
+;;     (interactive)
+;;     (progn
+;;       (org-capture nil "rd")
+;;       (org-capture-finalize t)
+;;       (org-speed-move-safe 'outline-up-heading)
+;;       (org-narrow-to-subtree)
+;;       (org-gcal-fetch)
+;;       (org-clock-in)))
+
+;;   (defun nemacs-org-capture-review-weekly ()
+;;     (interactive)
+;;     (progn
+;;       (org-capture nil "rw")
+;;       (org-capture-finalize t)
+;;       (org-speed-move-safe 'outline-up-heading)
+;;       (org-narrow-to-subtree)
+;;       (org-gcal-fetch)
+;;       (org-clock-in)))
+;;   :hook (org-capture-before-finalize . nemacs-org-capture-add-basic-properties)
+;;   :bind (("M-m"     . nemacs-org-capture)
+;;          ("C-c c"   . org-capture)
+;;          ("C-c r d" . nemacs-org-capture-review-daily)
+;;          ("C-c r w" . nemacs-org-capture-review-weekly))
+;;   :custom
+;;   (org-capture-templates `(("t" "Add TODO Task" entry (file ,org-default-notes-file)
+;;                             ,nemacs-org-capture-basic-template
+;;                             :empty-lines 1 :immediate-finish t)
+;;                            ("T" "Add Linked TODO Task" entry (file ,org-default-notes-file)
+;;                             ,nemacs-org-capture-link-template
+;;                             :empty-lines 1 :immediate-finish t)
+;;                            ("c" "Add Contact" entry (file "~/Dropbox/orgfiles/contacts.org")
+;;                             ,nemacs-org-capture-contact-template
+;;                             :empty-lines 1)
+
+;;                            ("rd" "Review: Daily" entry (file+olp+datetree "/tmp/reviews.org")
+;;                             (file "~/Dropbox/orgfiles/templates/daily-review.template.org"))
+;;                            ("rw" "Review: Weekly" entry (file+olp+datetree "/tmp/reviews.org")
+;;                             (file "~/Dropbox/orgfiles/templates/weekly-review.template.org")))))

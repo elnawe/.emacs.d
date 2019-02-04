@@ -1,6 +1,8 @@
-(use-package boxquote)
+(use-package boxquote
+  :if (eq system-type 'gnu/linux))
 
 (use-package message
+  :if (eq system-type 'gnu/linux)
   :ensure nil
   :preface
   (defun nemacs-boxquote-region-or-input ()

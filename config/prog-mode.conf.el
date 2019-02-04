@@ -1,4 +1,5 @@
 (use-package prog-mode
+  :if (eq system-type 'gnu/linux)
   :ensure nil
   :preface
   (defun nemacs-prog-mode ()

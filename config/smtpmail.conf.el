@@ -1,4 +1,5 @@
 (use-package smtpmail
+  :if (eq system-type 'gnu/linux)
   :ensure nil
   :preface
   (defun nemacs-my-signature ()

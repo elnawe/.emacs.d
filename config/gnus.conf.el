@@ -3,6 +3,7 @@
   (defvar gnus-balloon-face-1))
 
 (use-package rs-gnus-summary
+  :if (eq system-type 'gnu/linux)
   :load-path "~/.emacs.d/elisp/"
   :config
   (defalias 'gnus-user-format-function-size 'rs-gnus-summary-line-message-size)
@@ -11,6 +12,7 @@
   (setq gnus-balloon-face-1 'rs-gnus-balloon-1))
 
 (use-package gnus
+  :if (eq system-type 'gnu/linux)
   :ensure nil
   :preface
   (require 'nnir)
@@ -106,6 +108,7 @@
   (nnmail-expiry-target "nsacchetti.com/trash"))
 
 (use-package gnus-art
+  :if (eq system-type 'gnu/linux)
   :ensure nil
   :hook (gnus-article-display . gnus-article-highlight-citation)
   :custom
@@ -116,6 +119,7 @@
   (gnus-header-subject ((t (:foreground "navy" :weight bold)))))
 
 (use-package gnus-demon
+  :if (eq system-type 'gnu/linux)
   :ensure nil
   :preface
   (defun nemacs-gnus-demon-setup ()
@@ -134,6 +138,7 @@
   :hook (gnus-startup . nemacs-gnus-demon-setup))
 
 (use-package gnus-group
+  :if (eq system-type 'gnu/linux)
   :ensure nil
   :preface
   :hook ((gnus-group-mode . hl-line-mode)
@@ -147,6 +152,7 @@
   (gnus-group-mail-3-empty ((t (:foreground "navy" :inherit default :weight normal)))))
 
 (use-package gnus-sum
+  :if (eq system-type 'gnu/linux)
   :ensure nil
   :preface
   (defun nemacs-gnus-summary-mode-setup ()
@@ -185,6 +191,7 @@
         gnus-summary-highlight))
 
 (use-package gnus-alias
+  :if (eq system-type 'gnu/linux)
   :after gnus
   :commands (gnus-alias-determine-identity
              gnus-alias-message-x-completion
