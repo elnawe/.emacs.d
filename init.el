@@ -46,7 +46,7 @@
                 nemacs-config-dir
                 nemacs-local-dir
                 nemacs-etc-dir
-                (expaned-file-name "elpa" nemacs-packages-dir)))
+                (expand-file-name "elpa" nemacs-packages-dir)))
     (unless (file-directory-p dir)
       (make-directory dir t))))
 
