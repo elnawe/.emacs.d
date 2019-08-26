@@ -22,7 +22,9 @@
 
 ;; NEMACS variables
 (eval-and-compile
-  (defvar nemacs-shared-dir "~/Shared")
+  (defvar nemacs-shared-dir "~/Shared/")
+
+  (defvar nemacs-dotfiles-dir (concat nemacs-shared-dir "dotfiles/"))
 
   (defvar nemacs-emacs-dir (expand-file-name user-emacs-directory))
 
@@ -30,11 +32,13 @@
 
   (defvar nemacs-config-dir (concat nemacs-emacs-dir "config/"))
 
+  (defvar nemacs-df-config-dir (concat nemacs-dotfiles-dir "elisp"))
+
   (defvar nemacs-config-file-list '())
 
   (defvar nemacs-packages-dir (concat nemacs-local-dir "packages/"))
 
-  (defvar nemacs-cache-dir (concat nemacs-emacs-dir "cache/"))
+  (defvar nemacs-cache-dir (concat nemacs-local-dir "cache/"))
 
   (defvar nemacs-etc-dir (concat nemacs-local-dir "etc/"))
 
@@ -151,6 +155,11 @@
 (dolist (file (directory-files nemacs-config-dir))
   (when (string-match (format "^\\(.+\\)\\.conf\\.el$") file)
     (add-to-list 'nemacs-config-file-list (expand-file-name file nemacs-config-dir) t)))
+
+(dolist (file (directory-files nemacs-df-config-dir))
+  (when (string-match (format "^\\(.+\\)\\.conf\\.el$") file)
+    (add-to-list 'nemacs-config-file-list (expand-file-name file nemacs-df-config-dir) t)))
+
 
 ;; Initialization
 (add-hook 'after-init-hook
