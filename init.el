@@ -172,6 +172,4 @@
 
               ;; Reset defaults
               (setq gc-cons-threshold 16777216
-                    gc-cons-percentage 0.1)
-
-              (add-to-list 'default-frame-alist '(fullscreen . maximized))))
+                    gc-cons-percentage 0.1)))
