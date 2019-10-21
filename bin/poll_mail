@@ -1,0 +1,7 @@
+# Poll e-mail with Offlineimap
+offlineimap -c ~/.offlineimaprc
+
+# Update e-mail database with notmuch
+notmuch new
+
+# TODO: Reset tags

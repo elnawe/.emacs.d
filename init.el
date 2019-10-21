@@ -22,17 +22,12 @@
 
 ;; NEMACS variables
 (eval-and-compile
-  (defvar nemacs-shared-dir "~/Shared/")
-
-  (defvar nemacs-dotfiles-dir (concat nemacs-shared-dir "dotfiles/"))
 
   (defvar nemacs-emacs-dir (expand-file-name user-emacs-directory))
 
   (defvar nemacs-local-dir (concat nemacs-emacs-dir ".local/"))
 
   (defvar nemacs-config-dir (concat nemacs-emacs-dir "config/"))
-
-  (defvar nemacs-df-config-dir (concat nemacs-dotfiles-dir "elisp"))
 
   (defvar nemacs-config-file-list '())
 
@@ -65,7 +60,7 @@
               delete-by-moving-to-trash t
               fill-column 80
               frame-inhibit-implied-resize t
-              frame-title-format "NEMACS"
+              frame-title-format "NEMACS ITX"
               help-window-select t
               highlight-nonselected-windows nil
               fringe-indicator-alist (delq
@@ -121,7 +116,7 @@
 (delete-selection-mode t)
 (column-number-mode t)
 (set-fontset-font t 'unicode (font-spec :name "IBM Plex Mono") nil)
-(set-face-font 'default "IBM Plex Mono-11")
+(set-face-font 'default "IBM Plex Mono-13")
 
 ;; Packages and memory
 (eval-and-compile
@@ -155,11 +150,6 @@
 (dolist (file (directory-files nemacs-config-dir))
   (when (string-match (format "^\\(.+\\)\\.conf\\.el$") file)
     (add-to-list 'nemacs-config-file-list (expand-file-name file nemacs-config-dir) t)))
-
-(dolist (file (directory-files nemacs-df-config-dir))
-  (when (string-match (format "^\\(.+\\)\\.conf\\.el$") file)
-    (add-to-list 'nemacs-config-file-list (expand-file-name file nemacs-df-config-dir) t)))
-
 
 ;; Initialization
 (add-hook 'after-init-hook

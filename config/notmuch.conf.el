@@ -1,4 +1,5 @@
 (use-package notmuch
+  :load-path "/usr/local/share/emacs/site-lisp/notmuch"
   :preface
   ;; All this code was taken from notmuch-unread
   ;; https://github.com/emacsattic/notmuch-unread
@@ -49,7 +50,9 @@
             (delq 'notmuch-unread-mode-line-string
                   global-mode-string))))
   :bind
-  (("C-x m" . notmuch))
+  (("C-x m" . notmuch)
+   :map notmuch-hello-mode-map
+   ("g" . offlineimap))
   :config
   (notmuch-unread-mode t)
   :custom
