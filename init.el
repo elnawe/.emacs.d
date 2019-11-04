@@ -156,11 +156,6 @@
   (when (string-match (format "^\\(.+\\)\\.conf\\.el$") file)
     (add-to-list 'nemacs-config-file-list (expand-file-name file nemacs-config-dir) t)))
 
-(dolist (file (directory-files nemacs-df-config-dir))
-  (when (string-match (format "^\\(.+\\)\\.conf\\.el$") file)
-    (add-to-list 'nemacs-config-file-list (expand-file-name file nemacs-df-config-dir) t)))
-
-
 ;; Initialization
 (add-hook 'after-init-hook
           #'(lambda ()
@@ -172,4 +167,7 @@
 
               ;; Reset defaults
               (setq gc-cons-threshold 16777216
-                    gc-cons-percentage 0.1)))
+                    gc-cons-percentage 0.1)
+
+              ;; Open the Emacs Server
+              (server-start)))
