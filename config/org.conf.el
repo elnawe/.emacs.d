@@ -51,6 +51,7 @@
                               ("Possible_Story" . ?s)
                               ("Need_Story"     . ?S)
                               ("@computer"      . ?c)
+                              ("@game_room"     . ?g)
                               ("@home"          . ?h)
                               ("@meeting"       . ?m)
                               ("@office"        . ?o)
@@ -59,10 +60,13 @@
   (org-todo-keywords '((sequence "TODO(t!)"
                                  "NEXT(n@)"
                                  "PROJECT(p)"
-                                 "WAITING (w)"
+                                 "WAITING(w)"
                                  "|"
                                  "DONE(d)"
                                  "CANCELED(c@)")))
+  (org-todo-keyword-faces '(("PROJECT" . "#f1fa8c")
+                            ("WAITING" . "#61bfff")
+                            ("CANCELED" . error)))
   :custom-face
   (org-level-1 ((t (:height unspecified)))))
 
@@ -93,16 +97,22 @@
                ("x" . nemacs-org-agenda-mark-as-done)
                ("X" . nemacs-org-agenda-mark-as-done-capture-follow-up)))
   :custom
-  (org-agenda-category-icon-alist '(("Birthday" "~/.emacs.d/icons/org/birthday.png" nil nil :ascent center)
-                                    ("Calendar" "~/.emacs.d/icons/org/calendar.png" nil nil :ascent center)
-                                    ("Contacts" "~/.emacs.d/icons/org/contacts.png" nil nil :ascent center)
-                                    ("Emacs"    "~/.emacs.d/icons/org/emacs.png"    nil nil :ascent center)
-                                    ("Holiday"  "~/.emacs.d/icons/org/holiday.png"  nil nil :ascent center)
-                                    ("Inbox"    "~/.emacs.d/icons/org/inbox.png"    nil nil :ascent center)
-                                    ("Life"     "~/.emacs.d/icons/org/qol.png"      nil nil :ascent center)
-                                    ("Personal" "~/.emacs.d/icons/org/personal.png" nil nil :ascent center)
-                                    ("Someday"  "~/.emacs.d/icons/org/someday.png"  nil nil :ascent center)
-                                    ("Work"     "~/.emacs.d/icons/org/itx.png"      nil nil :ascent center)
+  (org-agenda-category-icon-alist '(("Birthday"  "~/.emacs.d/icons/org/birthday.png" nil nil :ascent center)
+                                    ("Calendar"  "~/.emacs.d/icons/org/calendar.png" nil nil :ascent center)
+                                    ("Contacts"  "~/.emacs.d/icons/org/contacts.png" nil nil :ascent center)
+                                    ("Holiday"   "~/.emacs.d/icons/org/holiday.png"  nil nil :ascent center)
+                                    ("Life"      "~/.emacs.d/icons/org/qol.png"      nil nil :ascent center)
+                                    ("Personal"  "~/.emacs.d/icons/org/personal.png" nil nil :ascent center)
+                                    ;; Using right now below this point.
+                                    ("Emacs"     "~/.emacs.d/icons/org/emacs.png"    nil nil :ascent center)
+                                    ("Game Room" "~/.emacs.d/icons/org/gameroom.png" nil nil :ascent center)
+                                    ("Inbox"     "~/.emacs.d/icons/org/inbox.png"    nil nil :ascent center)
+                                    ("Home"      "~/.emacs.d/icons/org/home.png"     nil nil :ascent center)
+                                    ("Someday"   "~/.emacs.d/icons/org/someday.png"  nil nil :ascent center)
+                                    ("ITX"       "~/.emacs.d/icons/org/itx.png"      nil nil :ascent center)
+                                    ("ROR"       "~/.emacs.d/icons/org/ror.png"      nil nil :ascent center)
+                                    ("OK"        "~/.emacs.d/icons/org/ok.png"       nil nil :ascent center)
+                                    ("FALKOR"    "~/.emacs.d/icons/org/falkor.png"   nil nil :ascent center)
                                     (".*" '(space . (:width (16))))))
   (org-agenda-custom-commands '(("u" "Unscheduled TODOs" ((todo "TODO"
                                                                 ((org-agenda-overriding-header "Unscheduled TODO")
