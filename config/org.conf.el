@@ -2,7 +2,8 @@
   :ensure org-plus-contrib
   :preface
   (defun nemacs-org-mode-hook ()
-    (setq line-spacing 0.2)
+    (interactive)
+    (setq line-spacing 0.3)
     (flyspell-mode 1)
     (org-bullets-mode 1)
     (turn-on-auto-fill))
@@ -15,8 +16,17 @@
     (interactive)
     (cd "~/Dropbox/orgs/")
     (helm-find-files nil))
-  :hook ((org-after-refile-insert . save-buffer)
-         (org-mode                . nemacs-org-mode-hook))
+
+  (defun nemacs-org-sort-entries-by-todo ()
+    ;; TODO: Make this workable
+    "Sort the entries in the file by `TODO' keyword."
+    (interactive)
+    (save-excursion
+      (outline-show-children 2)
+      (re-search-backward (file-relative-name (buffer-file-name)))
+      (org-sort-entries nil ?o)))
+  :hook ((org-after-refile-insert     . org-save-all-org-buffers)
+         (org-mode                    . nemacs-org-mode-hook))
   :bind (("C-c i" . nemacs-org-open-inbox)
          ("C-c t" . nemacs-org-open-orgs))
   :custom
@@ -37,7 +47,8 @@
   (org-refile-allow-creating-parent-nodes 'confirm)
   (org-refile-targets `(((,org-default-notes-file
                           "~/Dropbox/orgs/someday.org"
-                          "~/Dropbox/orgs/todo.org") :maxlevel . 5)))
+                          "~/Dropbox/orgs/personal.org"
+                          "~/Dropbox/orgs/work.org") :maxlevel . 5)))
   (org-refile-use-outline-path t)
   (org-startup-folded t)
   (org-startup-truncated nil)
@@ -60,9 +71,9 @@
   (org-todo-keywords '((sequence "TODO(t!)"
                                  "NEXT(n@)"
                                  "PROJECT(p)"
-                                 "WAITING(w)"
+                                 "WAITING(w@)"
                                  "|"
-                                 "DONE(d)"
+                                 "DONE(d@)"
                                  "CANCELED(c@)")))
   (org-todo-keyword-faces '(("PROJECT" . "#f1fa8c")
                             ("WAITING" . "#61bfff")
@@ -102,8 +113,8 @@
                                     ("Contacts"  "~/.emacs.d/icons/org/contacts.png" nil nil :ascent center)
                                     ("Holiday"   "~/.emacs.d/icons/org/holiday.png"  nil nil :ascent center)
                                     ("Life"      "~/.emacs.d/icons/org/qol.png"      nil nil :ascent center)
-                                    ("Personal"  "~/.emacs.d/icons/org/personal.png" nil nil :ascent center)
                                     ;; Using right now below this point.
+                                    ("Personal"  "~/.emacs.d/icons/org/personal.png" nil nil :ascent center)
                                     ("Emacs"     "~/.emacs.d/icons/org/emacs.png"    nil nil :ascent center)
                                     ("Game Room" "~/.emacs.d/icons/org/gameroom.png" nil nil :ascent center)
                                     ("Inbox"     "~/.emacs.d/icons/org/inbox.png"    nil nil :ascent center)
@@ -117,10 +128,10 @@
   (org-agenda-custom-commands '(("u" "Unscheduled TODOs" ((todo "TODO"
                                                                 ((org-agenda-overriding-header "Unscheduled TODO")
                                                                  (org-agenda-todo-ignore-scheduled 'future)))))))
-  (org-agenda-files '("~/Dropbox/orgs/inbox.org"
-                      "~/Dropbox/orgs/todo.org"
-                      "~/Dropbox/orgs/someday.org"
-                      "~/Dropbox/orgs/calendar.org"))
+  (org-agenda-files '("~/Dropbox/orgs/calendar.org"
+                      "~/Dropbox/orgs/inbox.org"
+                      "~/Dropbox/orgs/personal.org"
+                      "~/Dropbox/orgs/work.org"))
   (org-agenda-inhibit-startup nil)
   (org-agenda-show-future-repeats nil)
   (org-agenda-skip-deadline-if-done nil)
@@ -163,14 +174,19 @@
     (org-id-get-create))
 
   (defun nemacs-org-capture-quick-task ()
-    "Captures a quick task. Used on `M-n' and across the operating system."
+    "Captures a quick task. Used on `M-n' and across the operating system (with `Super-N')."
     (interactive)
     (org-capture :keys "t"))
 
   (defun nemacs-org-capture-linked-task ()
-    "Captures a linked quick task. Used on `M-N' and across the operating system."
+    "Captures a linked quick task. Used on `M-N' and across the operating system (with `Super-N')."
     (interactive)
     (org-capture :keys "l"))
+
+  ;; TODO: Make this function work to create a new Tech Spec in the right place with the right title.
+  (defun nemacs-org-create-new-tech-spec (prompt)
+    "Creates a new Technical Spec from the `tech-spec.template'"
+    (interactive "^P"))
   :hook (org-capture-before-finalize . nemacs-org-capture-add-basic-properties)
   :bind (("M-n"   . nemacs-org-capture-quick-task)
          ("M-N"   . nemacs-org-capture-linked-task)
@@ -182,13 +198,6 @@
                            ("l" "Add a Linked TODO task" entry (file+headline ,org-default-notes-file "inbox.org")
                             ,nemacs-org-capture-link-template))))
 
-(use-package org-contacts
-  :ensure nil
-  :after org
-  :custom
-  (org-contacts-birthday-format " %l")
-  (org-contacts-files '("~/Dropbox/orgs/contacts.org")))
-
 (use-package org-id
   :ensure nil
   :after org
@@ -196,7 +205,6 @@
   (org-id-locations-file "~/Dropbox/orgs/org-ids")
   (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 
-(use-package org-notmuch
+(use-package ox-confluence
   :ensure nil
-  :custom
-  (org-email-link-description-format "Email %c: %s"))
+  :after org-plus-contrib)
