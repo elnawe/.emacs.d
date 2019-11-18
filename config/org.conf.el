@@ -75,11 +75,12 @@
                                  "|"
                                  "DONE(d@)"
                                  "CANCELED(c@)")))
-  (org-todo-keyword-faces '(("PROJECT" . "#f1fa8c")
-                            ("WAITING" . "#61bfff")
-                            ("CANCELED" . error)))
-  :custom-face
-  (org-level-1 ((t (:height unspecified)))))
+  (org-todo-keyword-faces '(("TODO"     . "#5D54E1")
+                            ("NEXT"     . "#FEAC71")
+                            ("PROJECT"  . "#F1FA8C")
+                            ("WAITING"  . "#61BFFF")
+                            ("DONE"     . "#50FA7B")
+                            ("CANCELED" . "#FF5555"))))
 
 (use-package org-agenda
   :ensure nil

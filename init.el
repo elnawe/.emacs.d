@@ -156,6 +156,9 @@
   (when (string-match (format "^\\(.+\\)\\.conf\\.el$") file)
     (add-to-list 'nemacs-config-file-list (expand-file-name file nemacs-config-dir) t)))
 
+(add-to-list 'custom-theme-load-path (concat user-emacs-directory "/themes"))
+(load-theme 'monochrome-dark t)
+
 ;; Initialization
 (add-hook 'after-init-hook
           #'(lambda ()

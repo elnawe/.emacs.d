@@ -1,3 +1,9 @@
+(use-package boxquote
+  :bind ((:map mu4e-compose-mode-map
+               ("C-`"   . boxquote-text)
+               ("C-~"   . boxquote-region)
+               ("C-M-`" . boxquote-title))))
+
 (use-package helm-mu
   :after (mu4e helm)
   :bind ((:map mu4e-main-mode-map
@@ -13,6 +19,7 @@
          ("C-x M" . mu4e-compose-new))
   :preface
   (require 'org-mu4e)
+  (require 'mu4e-contrib)
   (require 'mu4e-context)
 
   (defun nemacs-compose-setup-mode ()
@@ -26,12 +33,22 @@
     (interactive)
     (org-mu4e-compose-org-mode))
 
+  (defun nemacs-headers-setup-mode ()
+    "Setup the `mu4e-headers' view."
+    (setq line-spacing 0.2))
+
   (defun nemacs-get-email ()
     "Calls the `pull_email' script."
     (interactive)
     (async-shell-command "~/Dropbox/dotfiles/bin/pull_email" "*pull_email*"))
+
+  (defun nemacs-mu4e-update-and-find-unread-mail ()
+    (interactive)
+    (mu4e-update-index)
+    (mu4e-headers-search "flag:unread"))
   :hook ((mu4e-view-mode    . turn-on-visual-line-mode)
-         (mu4e-compose-mode . nemacs-compose-setup-mode))
+         (mu4e-compose-mode . nemacs-compose-setup-mode)
+         (mu4e-headers-mode . nemacs-headers-setup-mode))
   :bind ((:map mu4e-main-mode-map
                ("G" . nemacs-get-email)))
   :custom
@@ -43,6 +60,8 @@
   (mu4e-html2text-command "w3m -dump -T text/html")
   (mu4e-compose-format-flowed t)
   (mu4e-attachment-dir "~/Downloads")
+  (message-cite-reply-position 'above)
+  (message-cite-style message-cite-style-outlook)
   (message-kill-buffer-on-exit t)
   (mu4e-compose-dont-reply-to-self t)
   (org-mu4e-convert-to-html t)
@@ -56,8 +75,9 @@
                      :name "ITX"
                      :vars '((user-mail-address             . "nsacchetti@itx.com")
                              (user-full-name                . "Nahuel Jesús Sacchetti")
-                             (mu4e-sent-folder              . "/itx/Sent Items")
                              (mu4e-drafts-folder            . "/itx/Drafts")
+                             (mu4e-sent-folder              . "/itx/Sent Items")
+                             (mu4e-refile-folder            . "/itx/Archive")
                              (mu4e-trash-folder             . "/itx/Deleted Items")
                              (mu4e-compose-signature        . (concat "Nahuel Jesús Sacchetti\n"
                                                                       "ITX Solutions Architect\n\n"
