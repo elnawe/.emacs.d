@@ -4,7 +4,8 @@
   (defun nemacs-org-mode-hook ()
     (interactive)
     (setq line-spacing 0.3)
-    (flyspell-mode 1)
+    (flyspell-mode-off)
+    (org-indent-mode)
     (org-bullets-mode 1)
     (turn-on-auto-fill))
 
