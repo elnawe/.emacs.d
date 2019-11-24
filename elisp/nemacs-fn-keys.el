@@ -26,7 +26,7 @@
 (defun nemacs-fn-key-mute-volume ()
   "Mute the system volume."
   (interactive)
-  (shell-command (concat nemacs-exwm-fn-key-controller " --mute-volume")))
+  (shell-command (concat nemacs-exwm-fn-key-controller " --mute-volume") nil))
 
 (defun nemacs-fn-key-decrease-volume ()
   "Decrease the system volume."

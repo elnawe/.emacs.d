@@ -70,10 +70,9 @@ of line."
   (kill-buffer (current-buffer)))
 
 (defun nemacs-check-large-file ()
-  "Check if the buffer's file is large (see
-`nemacs-large-file-size'). If so, ask for confirmation to open it
-literally (read-only, disable undo and in fundamental-mode) for
-performance sake."
+  "Check if the buffer's file is large (see `nemacs-large-file-size'). If so,
+ask for confirmation to open it literally (read-only, disable undo and in
+fundamental-mode) for performance sake."
   (let* ((filename (buffer-file-name))
          (size (nth 7 (file-attributes filename))))
     (when (and (not (memq major-mode nemacs-large-file-modes-list))
@@ -101,8 +100,8 @@ performance sake."
   (other-window 1))
 
 (defun nemacs-prompt-before-exiting-emacs ()
-  "Prompts before closing the frame with `C-x C-c'. Standarizes
-`emacs' and `emacsclient'."
+  "Prompts before closing the frame with `C-x C-c'. Standarizes `emacs' and
+`emacsclient'."
   (interactive)
   (if (y-or-n-p ">>> Quit Nemacs? ")
       (save-buffers-kill-terminal)

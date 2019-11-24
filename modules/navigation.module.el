@@ -6,6 +6,8 @@
 
   (helm-mode t)
 
+  (define-key helm-map (kbd "TAB") #'helm-maybe-exit-minibuffer)
+
   (global-set-key [remap find-file] #'helm-find-files)
   (global-set-key [remap execute-extended-command] #'helm-M-x)
   (global-set-key [remap switch-to-buffer] #'helm-mini)
@@ -18,8 +20,9 @@
           "\\` " "\\*helm" "\\*helm-mode"
           ;; Emacs buffers
           "\\*Echo Area" "\\*Minibuf" "\\*Compile-Log\\*"
-          "\\*dashboard\\*" "\\*scratch\\*" "\\*Help\\*" "tramp/.+"
-          "\\*Messages\\*" "\\*Flycheck error" "\\*.+(.+)" "elpa/.+"
+          "\\*Backtrace\\*" "\\*dashboard\\*" "\\*scratch\\*"
+          "\\*Help\\*" "tramp/.+" "\\*Flycheck error"
+          "\\*Messages\\*" "\\*.+(.+)" "elpa/.+"
           ;; Magit buffers
           "\\*magit-process:" "\\*magit-diff:")
         helm-dwim-target 'completion

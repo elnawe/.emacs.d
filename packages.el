@@ -34,7 +34,8 @@
         projectile
         vterm
         windmove
-        xelb))
+        xelb
+        zerodark-theme))
 
 (when (not package-archive-contents)
   (package-refresh-contents))

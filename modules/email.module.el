@@ -69,7 +69,7 @@
         mu4e-confirm-quit nil
         mu4e-context-policy 'pick-first
         mu4e-get-mail-command "true"
-        mu4e-html2text-command "w3m -dump -T text/html"
+        mu4e-html2text-command "w3m -dump -T text/html -cols 120"
         mu4e-maildir nemacs-maildir-dir
         mu4e-sent-messages-behavior 'delete
         mu4e-update-interval 300

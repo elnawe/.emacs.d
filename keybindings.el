@@ -1,10 +1,10 @@
 (require 'nemacs-utils)
 
-(global-set-key [remap save-buffers-kill-emacs] ;; C-x C-c
-                #'nemacs-prompt-before-exiting-emacs)
+;; (global-set-key [remap save-buffers-kill-emacs] ;; C-x C-c
+;;                 #'nemacs-prompt-before-exiting-emacs)
 
-(global-set-key [remap save-buffers-kill-terminal] ;; C-x C-c
-                #'nemacs-prompt-before-exiting-emacs)
+;; (global-set-key [remap save-buffers-kill-terminal] ;; C-x C-c
+;;                 #'nemacs-prompt-before-exiting-emacs)
 
 (global-set-key [remap suspend-frame] ;; C-z
                 #'ignore)
