@@ -76,7 +76,7 @@
         gc-cons-percentage 0.6))
 
 (setq max-lisp-eval-depth 50000
-      max-specpdl-size 10000)
+      max-specpdl-size 13000)
 
 ;; Load Modules Configuration
 (setq load-prefer-newer noninteractive)

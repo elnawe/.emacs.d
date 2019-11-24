@@ -17,18 +17,19 @@
 
 ;;; Code:
 
-(load "vars.el")
-(load "preload.el")
-(load "packages.el")
-(load "keybindings.el")
-(load "theme.el")
+(dolist (file '("vars.el"
+                "preload.el"
+                "packages.el"
+                "keybindings.el"
+                "theme.el"))
+  (load (concat user-emacs-directory file)))
 
 (add-hook 'after-init-hook
           #'(lambda ()
               (dolist (module (directory-files nemacs-modules-dir))
                 (when (string-match (format "^\\(.+\\)\\.module\\.el$") module)
                   (message "Loading " module)
-                  (load module)))
+                  (load (concat nemacs-modules-dir module))))
 
               (setq gc-cons-threshold 16777216
                     gc-cons-percentage 0.1)
@@ -36,4 +37,5 @@
               (require 'nemacs-ensure-system)
               (nemacs-ensure-system-check-errors)
 
-              (server-start)))
+              (unless (or (daemonp) (server-running-p))
+                (server-start))))

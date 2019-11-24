@@ -23,7 +23,7 @@ using `(nemacs-delete-cache)'.")
 This folder contains specific configuration files created by
 Emacs or specific packages. This data should not be deleted.")
 
-  (defvar nemacs-packages-dir (concat nemacs-local-dir "packages/")
+  (defvar nemacs-packages-dir (expand-file-name "packages/elpa" nemacs-local-dir)
     "Folder containing all the packages downloaded from MELPA.")
 
   (defvar nemacs-modules-dir (concat nemacs-emacs-dir "modules/")
@@ -37,7 +37,7 @@ reloaded at the same time using `nemacs-reload-all-modules'.")
   (defvar nemacs-themes-dir (concat nemacs-emacs-dir "themes/")
     "Contains themes used in NEMACS at least once.")
 
-  (defvar nemacs-elisp-dir (concat nemacs-emacs-dir "elisp/")
+  (defvar nemacs-elisp-dir (expand-file-name "elisp" nemacs-emacs-dir)
     "Where the custom code lives. Usually code created
 specifically for NEMACS, but also code that cannot be downloaded
 through the Emacs package manager.")
