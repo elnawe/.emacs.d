@@ -38,8 +38,8 @@
 from the workspace of that monitor into the laptop screen."
     (let ((monitors (string-to-number (shell-command-to-string "xrandr --listactivemonitors | wc -l"))))
       (when (eq monitors 2)
-        (message "Plugged external monitor is now disconnected.")
-        (message "Moving windows to laptop monitor.")
+        (message "External monitor is now disconnected.")
+        (message "Moving windows to laptop.")
         (exwm-workspace-delete 1)
         (nemacs-exwm-switch-to-laptop-screen))))
 
