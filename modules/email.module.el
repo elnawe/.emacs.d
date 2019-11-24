@@ -15,11 +15,17 @@
       (mu4e)
       (mu4e-update-mail-and-index)))
 
+  (defun nemacs-mu4e-update-and-find-unread-mail ()
+    "Opens `mu4e-headers' with the parameter `flag:unread'. Used in Polybar."
+    (interactive)
+    (mu4e-update-index)
+    (mu4e-headers-search "flag:unread"))
+
   (defun nemacs-email-get-mail ()
     "Runs the command to get the e-mail from the server."
     (interactive)
     (async-shell-command
-     (expand-file-name nemacs-dropbox-dir "dotfiles/bin/pull_email")
+     (expand-file-name "dotfiles/bin/pull_email" nemacs-dropbox-dir)
      "*pull_email*"))
 
   (defun nemacs-setup-mu4e-main-mode ()
@@ -63,7 +69,7 @@
         mu4e-confirm-quit nil
         mu4e-context-policy 'pick-first
         mu4e-get-mail-command "true"
-        mu4e-html2-text-command "w3m -dump -T text/html"
+        mu4e-html2text-command "w3m -dump -T text/html"
         mu4e-maildir nemacs-maildir-dir
         mu4e-sent-messages-behavior 'delete
         mu4e-update-interval 300

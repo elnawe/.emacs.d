@@ -5,10 +5,9 @@
 (setq package-enable-at-startup nil)
 
 (eval-and-compile
-  (setq load-path (append
-                   load-path
-                   nemacs-elisp-dir
-                   (directory-files package-user-dir t "^[^.]" t))))
+  (setq load-path (append load-path (directory-files package-user-dir t "^[^.]" t))))
+
+(add-to-list 'load-path nemacs-elisp-dir)
 
 (setq package-archives '(("org"          . "https://orgmode.org/elpa/")
                          ("gnu"          . "https://elpa.gnu.org/packages/")
@@ -19,10 +18,13 @@
 ;; Installing NEMACS
 (setq nemacs-necessary-packages
       '(boxquote
+        buffer-move
         dashboard
         doom-modeline
+        doom-themes
         exwm
         helm
+        helm-lastpass
         helm-mu
         json-mode
         markdown-mode
