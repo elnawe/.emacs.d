@@ -7,6 +7,8 @@
   (helm-mode t)
 
   (define-key helm-map (kbd "TAB") #'helm-maybe-exit-minibuffer)
+  (define-key helm-map (kbd "C-<backspace>") #'backward-kill-word)
+  (define-key helm-find-files-map (kbd "C-<backspace>") #'backward-kill-word)
 
   (global-set-key [remap find-file] #'helm-find-files)
   (global-set-key [remap execute-extended-command] #'helm-M-x)

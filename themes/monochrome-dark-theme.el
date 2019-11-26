@@ -578,7 +578,7 @@
    `(org-document-title                               ((t (:foreground ,color-12 :bold t))))
    `(org-document-info                                ((t (:foreground ,color-7))))
    `(org-document-info-keyword                        ((t (:foreground ,color-7))))
-   `(org-level-1                                      ((t (:foreground ,color-14 :bold t :height 2.0))))
+   `(org-level-1                                      ((t (:foreground ,color-14 :bold t))))
    `(org-level-2                                      ((t (:foreground ,color-14 :bold t))))
    `(org-level-3                                      ((t (:foreground ,color-14 :bold t))))
    `(org-level-4                                      ((t (:foreground ,color-14 :bold t))))

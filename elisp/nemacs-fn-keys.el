@@ -43,4 +43,13 @@
   (interactive)
   (shell-command (concat nemacs-exwm-fn-key-controller " --mute-mic")))
 
+(defun nemacs-fn-key-tools ()
+  "Open the Settings.
+
+`NOTE:' This requires `EXWM' to be loaded as the function used inside is defined
+in that configuration. No need for `with-eval-after-load' here because this
+function is already binded to the `exwm-input-global-keys'."
+  (interactive)
+  (nemacs-exwm-run-application "xfce4-settings-manager"))
+
 (provide 'nemacs-fn-keys)

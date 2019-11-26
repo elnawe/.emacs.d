@@ -48,11 +48,14 @@
               x-stretch-cursor t)
 
 ;; Save files
-(setq-default auto-save-list-file-name (concat nemacs-cache-dir "autosave")
-              bookmark-default-file    (concat nemacs-etc-dir   "bookmarks")
-              abbrev-file-name         (concat nemacs-local-dir "abbrev.el")
-              pcache-directory         (concat nemacs-cache-dir "pcache")
-              recentf-save-file        (expand-file-name "recentf" nemacs-cache-dir))
+(setq-default abbrev-file-name (concat nemacs-local-dir "abbrev.el")
+              auto-save-list-file-name (concat nemacs-cache-dir "autosave")
+              bookmark-default-file (concat nemacs-etc-dir   "bookmarks")
+              nsm-settings-file (expand-file-name "ns.data" nemacs-cache-dir)
+              pcache-directory (concat nemacs-cache-dir "pcache")
+              recentf-save-file (expand-file-name "recentf" nemacs-cache-dir)
+              savehist-file (expand-file-name "history" nemacs-cache-dir)
+              url-history-file (expand-file-name "url.el" nemacs-cache-dir))
 
 ;; Simpler UI
 (when window-system

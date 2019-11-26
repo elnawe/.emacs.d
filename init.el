@@ -21,6 +21,7 @@
                 "preload.el"
                 "packages.el"
                 "keybindings.el"
+                "hooks.el"
                 "theme.el"))
   (load (concat user-emacs-directory file)))
 

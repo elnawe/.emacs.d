@@ -17,13 +17,18 @@
 
 ;; Installing NEMACS
 (setq nemacs-necessary-packages
-      '(boxquote
+      '(all-the-icons
+        beacon
+        boxquote
         buffer-move
+        company
         dashboard
         doom-modeline
-        doom-themes
         exwm
+        fancy-battery
+        fill-column-indicator
         helm
+        helm-exwm
         helm-lastpass
         helm-mu
         json-mode
@@ -35,7 +40,7 @@
         vterm
         windmove
         xelb
-        zerodark-theme))
+        zenburn-theme))
 
 (when (not package-archive-contents)
   (package-refresh-contents))
