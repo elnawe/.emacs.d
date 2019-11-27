@@ -1,10 +1,19 @@
 ;; TODO: org-agenda to open projects based on TAGS
+;; TODO: Use org-super-agenda ^
 
+(require 'idle-org-agenda)
 (require 'org)
 (require 'org-agenda)
 (require 'org-bullets)
 (require 'org-capture)
 (require 'org-id)
+(require 'org-super-agenda)
+
+(with-eval-after-load 'idle-org-agenda
+  (setq idle-org-agenda-interval 600
+        idle-org-agenda-key "a")
+
+  (idle-org-agenda-mode))
 
 (with-eval-after-load 'org
   (defvar nemacs-org-dir (concat nemacs-dropbox-dir "Notes/")
@@ -42,12 +51,13 @@
         org-fontify-whole-heading-line t
         org-startup-folded nil
         org-startup-truncated nil
-        org-support-shift-always 'always
+        org-support-shift-select 'always
         org-tags-column -120)
 
   (setq org-refile-allow-creating-parent-nodes 'confirm
-        org-refile-targets org-agenda-files
-        org-refile-use-outline-path t)
+        org-refile-targets `(((,org-default-notes-file
+                               ,(nemacs-org-file "todo.org")) :level . 1))
+        org-refile-use-outline-path 'file)
 
   (setq org-tag-persistent-alist
         '(;; Action
@@ -65,8 +75,9 @@
          ("@office"   . ?o)
 
          ;; Projects
-         ("#OK"  . ?O)
-         ("#ROR" . ?R)))
+         ("#OK"       . ?O)
+         ("#PERSONAL" . ?P)
+         ("#ROR"      . ?R)))
 
  (setq org-todo-keywords
        '((sequence "TODO(t!)"
@@ -110,9 +121,9 @@ if the current task doesn't have one."
     (org-capture :keys "L"))
 
   (defun nemacs-org-agenda-open-work-agenda ()
-    "Opens the Work Agenda. Same as: `C-c a W'."
+    "Opens the Work Agenda. Same as: `C-c a t'."
     (interactive)
-    (org-agenda :keys "W"))
+    (org-agenda :keys "t"))
 
   (add-hook 'org-agenda-mode-hook #'nemacs-setup-org-agenda-mode)
 
@@ -120,11 +131,12 @@ if the current task doesn't have one."
   (define-key org-agenda-mode-map "t" #'nemacs-org-capture-TODO)
 
   (global-set-key (kbd "C-c a") #'org-agenda)
-  (global-set-key (kbd "C-c W") #'nemacs-org-agenda-open-work-agenda)
+  (global-set-key (kbd "C-c T") #'nemacs-org-agenda-open-work-agenda)
 
   (setq org-agenda-default-appointment-duration 60
         org-agenda-files `(,org-default-notes-file
-                           ,(nemacs-org-file "todo.org"))
+                           ,(nemacs-org-file "todo.org")
+                           ,(nemacs-org-file "calendar.org"))
         org-agenda-start-on-weekday 0
         org-agenda-time-grid '((daily today required-time remove-match)
                                (700 800 900 1000 1100 1200
@@ -132,17 +144,26 @@ if the current task doesn't have one."
                                "......" "----------------"))
 
   (setq org-agenda-custom-commands
-        `(("W" "Today @ work"
-           ((agenda ""
-                    ((org-agenda-compact-blocks t)
-                     (org-agenda-remove-tags t)
-                     (org-agenda-span 'day)))
-            (tags-todo "#ROR"
-                       ((org-agenda-overriding-header "Project: #ROR")
-                        (org-agenda-todo-ignore-scheduled 'future)))
-            (tags-todo "#OK"
-                       ((org-agenda-overriding-header "Project: #OK")
-                        (org-agenda-todo-ignore-scheduled 'future)))))))
+        `(("t" "Today @ work"
+           ((agenda "" ((org-agenda-overriding-header "Today")
+                        (org-agenda-span 'day)
+                        (org-super-agenda-groups
+                         '((:name none :time-grid t)))))
+            (todo "" ((org-agenda-overriding-header "Project: #ROR")
+                      (org-super-agenda-groups
+                       '((:name none
+                                :and (:tag "#ROR" :scheduled nil))
+                         (:discard (:anything t))))))
+            (todo "" ((org-agenda-overriding-header "Project: #OK")
+                      (org-super-agenda-groups
+                       '((:name none
+                                :and (:tag "#OK" :scheduled nil))
+                         (:discard (:anything t))))))))
+          ("r" "Review inbox"
+           ((todo "" ((org-agenda-files `(,org-default-notes-file))
+                      (org-agenda-overriding-header "GTD Review: Inbox")
+                      (org-agenda-sorting-strategy
+                       '(priority-up effort-down))))))))
 
   (zenburn-with-color-variables
     (custom-set-faces
@@ -173,3 +194,6 @@ if the current task doesn't have one."
 (with-eval-after-load 'org-id
   (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id
         org-id-locations-file (expand-file-name ".org-id" nemacs-org-dir)))
+
+(with-eval-after-load 'org-super-agenda
+  (org-super-agenda-mode))

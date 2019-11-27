@@ -30,12 +30,13 @@
         helm
         helm-exwm
         helm-lastpass
-        helm-mu
+        idle-org-agenda
         json-mode
         markdown-mode
         neotree
         org-bullets
         org-plus-contrib
+        org-super-agenda
         projectile
         vterm
         windmove
