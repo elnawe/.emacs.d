@@ -11,6 +11,7 @@
     (local-set-key (kbd "C-`")  #'boxquote-text)
     (local-set-key (kbd "C-\"") #'boxquote-region)
     (local-set-key (kbd "C-~")  #'boxquote-title)
+    (turn-off-auto-fill)
     (turn-on-visual-line-mode)
     (use-hard-newlines -1)
     (flyspell-mode))
@@ -35,6 +36,7 @@
 (with-eval-after-load 'notmuch
   (require 'nemacs-notmuch-tags)
   (require 'nemacs-notmuch-unread)
+  (require 'org-notmuch)
 
   (defun nemacs-setup-notmuch-search-mode ()
     "NEMACS Setup: Run thi sin `notmuch-search-hook'."
@@ -52,16 +54,23 @@
   (define-key notmuch-search-mode-map (kbd "C-?") #'nemacs-notmuch-toggle-tag-interactively)
   (define-key notmuch-search-mode-map "D" #'nemacs-notmuch-toggle-deleted)
   (define-key notmuch-search-mode-map "i" #'nemacs-notmuch-toggle-inbox)
-  (define-key notmuch-search-mode-map "S" #'nemacs-notmuch-mark-as-spam)
+  (define-key notmuch-search-mode-map "S" #'nemacs-notmuch-toggle-spam)
 
   (define-key notmuch-show-mode-map (kbd "C-?") #'nemacs-notmuch-toggle-tag-interactively)
   (define-key notmuch-show-mode-map "D" #'nemacs-notmuch-toggle-deleted)
   (define-key notmuch-show-mode-map "i" #'nemacs-notmuch-toggle-inbox)
-  (define-key notmuch-show-mode-map "S" #'nemacs-notmuch-mark-as-spam)
+  (define-key notmuch-show-mode-map "S" #'nemacs-notmuch-toggle-spam)
 
   (global-set-key (kbd "C-x m") #'notmuch)
 
   (setq notmuch-multipart/alternative-discouraged '("text/plain")
+        notmuch-saved-searches
+        '((:name "inbox" :query "tag:inbox" :key "i")
+          (:name "NEXT" :query "tag:NEXT" :key "n")
+          (:name "unread" :query "tag:unread" :key "u")
+          (:name "flagged" :query "tag:flagged" :key "f")
+          (:name "drafts" :query "tag:draft" :key "d")
+          (:name "all mail" :query "*" :key "a"))
         notmuch-search-oldest-first nil
         notmuch-search-result-format `(("date" . "%12s ")
                                        ("count" . "%-6s ")
@@ -69,6 +78,7 @@
                                        ("subject" . "%s ")
                                        ("tags" . "(%s)"))
         notmuch-show-relative-dates nil)
+
   (nemacs-notmuch-unread-mode))
 
 (with-eval-after-load 'smtpmail

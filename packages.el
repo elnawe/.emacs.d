@@ -32,6 +32,7 @@
         helm-lastpass
         idle-org-agenda
         json-mode
+        ledger-mode
         markdown-mode
         neotree
         org-bullets

@@ -27,22 +27,29 @@
                               "chat"
                               "code"
                               "deleted"
+                              "deploy"
                               "inbox"
                               "itx"
+                              "NEXT"
                               "paychex"
-                              "spam")
+                              "spam"
+                              "techspec")
   "Tags usually used in NEMACS Notmuch.")
 
-(defun nemacs-notmuch-mark-as-spam ()
-  "Mark message as spam."
+(defun nemacs-notmuch-toggle-spam ()
+  "Mark message as spam. Removes inbox."
   (interactive)
   (cond ((eq major-mode 'notmuch-search-mode)
-         (notmuch-search-tag '("+spam" "-inbox")))
+         (if (member "spam" (notmuch-search-get-tags))
+             (notmuch-search-tag '("+inbox" "-spam"))
+           (notmuch-search-tag '("+spam" "-inbox"))))
         ((eq major-mode 'notmuch-show-mode)
-         (notmuch-show-tag '("+spam" "-inbox")))))
+         (if (member "spam" (notmuch-show-get-tags))
+             (notmuch-show-tag '("+inbox" "-spam"))
+           (notmuch-show-tag '("+spam" "-inbox"))))))
 
 (defun nemacs-notmuch-toggle-inbox ()
-  "Mark message as spam."
+  "Toggles inbox state."
   (interactive)
   (cond ((eq major-mode 'notmuch-search-mode)
          (if (member "inbox" (notmuch-search-get-tags))
@@ -54,16 +61,16 @@
            (notmuch-show-tag '("+inbox"))))))
 
 (defun nemacs-notmuch-toggle-deleted ()
-  "Mark message as spam."
+  "Mark message as deleted. Removes inbox."
   (interactive)
   (cond ((eq major-mode 'notmuch-search-mode)
          (if (member "deleted" (notmuch-search-get-tags))
-             (notmuch-search-tag '("-deleted"))
-           (notmuch-search-tag '("+deleted"))))
+             (notmuch-search-tag '("+inbox" "-deleted"))
+           (notmuch-search-tag '("+deleted" "-inbox"))))
         ((eq major-mode 'notmuch-show-mode)
          (if (member "deleted" (notmuch-show-get-tags))
-             (notmuch-show-tag '("-deleted"))
-           (notmuch-show-tag '("+deleted"))))))
+             (notmuch-show-tag '("+inbox" "-deleted"))
+           (notmuch-show-tag '("+deleted" "-inbox"))))))
 
 (defun nemacs-notmuch-toggle-tag-interactively ()
   "Add or removes a tag interactively with the help of `Helm'."

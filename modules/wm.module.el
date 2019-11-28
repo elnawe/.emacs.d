@@ -9,6 +9,7 @@
   (require 'exwm-systemtray)
   (require 'helm-exwm)
   (require 'nemacs-fn-keys)
+  (require 'nemacs-org-ledger)
 
   (defvar nemacs-exwm-external-monitor-active nil
     "Current external monitor active status. Changes on
@@ -120,6 +121,7 @@ also copied into the clipboard."
           ([?\s-L]                . buf-move-right)
           ([S-s-right]            . buf-move-right)
 
+          ([?\s-I]                . nemacs-org-ledger-open)
           ([?\s-N]                . nemacs-org-capture-TODO)
           ([?\s-b]                . nemacs-exwm-switch-to-previous-buffer)
           ([?\s-B]                . helm-exwm)

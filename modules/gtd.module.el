@@ -11,20 +11,12 @@
 
 (with-eval-after-load 'idle-org-agenda
   (setq idle-org-agenda-interval 600
-        idle-org-agenda-key "a")
+        idle-org-agenda-key "t")
 
   (idle-org-agenda-mode))
 
 (with-eval-after-load 'org
-  (defvar nemacs-org-dir (concat nemacs-dropbox-dir "Notes/")
-    "Default directory for all the Org files related to notes.")
-
-  (defvar nemacs-org-todo-file ""
-    "File where all my TODOs are saved and managed.")
-
-  (defun nemacs-org-file (filename)
-    "Expands from `nemacs-org-dir', appending `filename'."
-    (expand-file-name filename nemacs-org-dir))
+  (require 'nemacs-org-ledger)
 
   (defun nemacs-setup-org-mode ()
     "NEMACS Setup: Run this function in `org-mode-hook'"
@@ -38,8 +30,7 @@
 
   (global-set-key (kbd "C-c l") #'org-store-link)
 
-  (setq nemacs-org-todo-file (nemacs-org-file "todo.org")
-        org-archive-location (nemacs-org-file "archive.org::datetree/")
+  (setq org-archive-location (nemacs-org-file "archive.org::datetree/")
         org-blank-before-new-entry '((heading . nil)
                                      (plain-list-item . nil))
         org-deadline-warning-days 7
@@ -52,7 +43,7 @@
         org-startup-folded nil
         org-startup-truncated nil
         org-support-shift-select 'always
-        org-tags-column -120)
+        org-tags-column -80)
 
   (setq org-refile-allow-creating-parent-nodes 'confirm
         org-refile-targets `(((,org-default-notes-file
@@ -111,14 +102,14 @@ property is: `RELATED'. Value of `RELATED' is the link to the task at point.
 Task will be linked by `ID', using `org-store-link' and creating an unique `ID'
 if the current task doesn't have one."
     (interactive "P")
-    (call-interactively #'org-store-link)
-    (setq-local org-capture-templates
-                `(("L" "Linked" entry (file ,org-default-notes-file)
-                  "* TODO %?
+    (let ((org-capture-templates
+           `(("L" "Linked" entry (file ,org-default-notes-file)
+              "* TODO %?
 :PROPERTIES:
 :RELATED: %a
-:END:")))
-    (org-capture :keys "L"))
+:END:"))))
+      (call-interactively #'org-store-link)
+      (org-capture :keys "L")))
 
   (defun nemacs-org-agenda-open-work-agenda ()
     "Opens the Work Agenda. Same as: `C-c a t'."
@@ -132,6 +123,12 @@ if the current task doesn't have one."
 
   (global-set-key (kbd "C-c a") #'org-agenda)
   (global-set-key (kbd "C-c T") #'nemacs-org-agenda-open-work-agenda)
+
+  (setq org-agenda-category-icon-alist
+        '(("INBOX" "~/.emacs.d/icons/org/inbox.png" nil nil :ascent center)
+          ("ITX" "~/.emacs.d/icons/org/itx.png" nil nil :ascent center)
+          ("TODO" "~/.emacs.d/icons/org/work.png" nil nil :ascent center)
+          (".*" '(space . (:width (16))))))
 
   (setq org-agenda-default-appointment-duration 60
         org-agenda-files `(,org-default-notes-file

@@ -86,14 +86,14 @@ fundamental-mode) for performance sake."
       (fundamental-mode))))
 
 (defun nemacs-create-window-bottom-and-switch ()
-  "Creates a new window to the bottom and then switch to it"
+  "Creates a new window to the bottom and then switch to it."
   (interactive)
   (split-window-below)
   (balance-windows)
   (other-window 1))
 
 (defun nemacs-create-window-right-and-switch ()
-  "Creates a new window to the right and then switch to it"
+  "Creates a new window to the right and then switch to it."
   (interactive)
   (split-window-right)
   (balance-windows)

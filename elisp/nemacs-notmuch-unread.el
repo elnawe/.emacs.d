@@ -47,8 +47,7 @@
   (defun nemacs-notmuch-unread-update-handler ()
     "Update the mode line."
     (setq nemacs-notmuch-unread-mode-line-string
-          (format " %s %d"
-                  (all-the-icons-faicon "envelope")
+          (format " M:%d"
                   (nemacs-notmuch-unread-count)))
     (force-mode-line-update))
 
