@@ -11,6 +11,8 @@
    `(fringe ((t (:background ,zenburn-bg-05))))
    `(fancy-battery-charging ((t (:bold t :foreground ,zenburn-fg+1))))
    `(fancy-battery-discharging ((t (:bold t :foreground ,zenburn-yellow))))
+   `(helm-candidate-number
+     ((t (:background ,zenburn-green-5 :foreground ,zenburn-fg))))
    `(hl-line ((t (:background ,zenburn-bg+1))))
    `(message-cited-text ((t (:foreground ,zenburn-fg-05))))
    `(message-header-name
@@ -19,16 +21,25 @@
    `(message-header-subject ((t (:foreground ,zenburn-cyan))))
    `(message-header-to ((t (:foreground ,zenburn-fg+1 :bold t))))
    `(message-separator ((t (:foreground ,zenburn-magenta :italic t))))
-   `(mode-line ((t (:background ,zenburn-green-5 :foreground ,zenburn-fg+1))))
+   `(mode-line
+     ((t (:background ,zenburn-green-5 :foreground ,zenburn-fg+1 :box nil))))
    `(mode-line-buffer-id ((t (:foreground ,zenburn-yellow))))
+   `(org-agenda-date ((t (:foreground ,zenburn-fg-05))))
+   `(org-agenda-date-today
+     ((t (:foreground ,zenburn-fg :height 150 :italic nil))))
+   `(org-agenda-date-weekend ((t (:bold t :foreground ,zenburn-fg-05))))
    `(org-agenda-done ((t (:strike-through t))))
    `(org-agenda-structure
-     ((t (:foreground ,zenburn-fg+1 :height 200 :underline t))))
+     ((t (:bold t :foreground ,zenburn-fg+1 :height 200 :underline t))))
    `(org-ellipsis ((t (:bold t :foreground ,zenburn-fg :underline nil))))
    `(org-headline-done ((t (:strike-through t))))
    `(org-level-1 ((t (:bold t :foreground ,zenburn-fg))))
-   `(org-todo ((t (:underline t))))
+   `(org-level-2 ((t (:foreground ,zenburn-fg :italic t))))
+   `(org-recur ((t (:bold t :box t :foreground ,zenburn-fg-05))))
+   `(org-scheduled ((t (:foreground ,zenburn-fg))))
    `(org-tag ((t (:foreground ,zenburn-cyan))))
+   `(org-time-grid ((t (:foreground ,zenburn-yellow))))
+   `(org-todo ((t (:underline t))))
    `(powerline-active0
      ((t (:background ,zenburn-green-5 :foreground ,zenburn-fg+1))))
    `(powerline-active1
@@ -40,10 +51,10 @@
 
    `(mode-line-buffer-id-inactive ((t (:foreground ,zenburn-fg-05))))
    `(mode-line-inactive
-     ((t :background ,zenburn-bg :foreground ,zenburn-fg-05)))
+     ((t (:background ,zenburn-bg :foreground ,zenburn-fg-05 :box nil))))
    `(powerline-inactive0
-     ((t :background ,zenburn-bg :foreground ,zenburn-fg-05)))
+     ((t (:background ,zenburn-bg :foreground ,zenburn-fg-05))))
    `(powerline-inactive1
-     ((t :background ,zenburn-bg :foreground ,zenburn-fg-05)))
+     ((t (:background ,zenburn-bg :foreground ,zenburn-fg-05))))
    `(powerline-inactive2
-     ((t :background ,zenburn-bg :foreground ,zenburn-fg-05)))))
+     ((t (:background ,zenburn-bg :foreground ,zenburn-fg-05))))))

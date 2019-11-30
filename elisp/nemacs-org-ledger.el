@@ -39,9 +39,11 @@
 pressing a key."
   (interactive)
   (let ((option (read-char "Open file:
-[b]ooking\t\t [i]nbox\t\t [t]odo\t\t [q]uit")))
+[b]ooking\t\t [c]alendar\t\t [i]nbox\t\t [t]odo\t\t [q]uit")))
     (cond ((char-equal option (string-to-char "b"))
            (find-file (nemacs-ledger-file "booking.ledger")))
+          ((char-equal option (string-to-char "c"))
+           (find-file (nemacs-org-file "calendar.org")))
           ((char-equal option (string-to-char "i"))
            (find-file (nemacs-org-file "inbox.org")))
           ((char-equal option (string-to-char "t"))

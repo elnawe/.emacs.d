@@ -1,4 +1,4 @@
-;; TODO: Change to mbsync with notmuch
+;; TODO: E-mail to calendar. Make text/calendar entries go to org-agenda.
 
 (require 'message)
 (require 'notmuch)
@@ -35,7 +35,6 @@
 
 (with-eval-after-load 'notmuch
   (require 'nemacs-notmuch-tags)
-  (require 'nemacs-notmuch-unread)
   (require 'org-notmuch)
 
   (defun nemacs-setup-notmuch-search-mode ()
@@ -77,9 +76,7 @@
                                        ("authors" . "%-30s ")
                                        ("subject" . "%s ")
                                        ("tags" . "(%s)"))
-        notmuch-show-relative-dates nil)
-
-  (nemacs-notmuch-unread-mode))
+        notmuch-show-relative-dates nil))
 
 (with-eval-after-load 'smtpmail
   (setq smtpmail-auth-credentials (expand-file-name "~/.authinfo")

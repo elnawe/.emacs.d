@@ -30,6 +30,7 @@
         helm
         helm-exwm
         helm-lastpass
+        helm-projectile
         idle-org-agenda
         json-mode
         ledger-mode
@@ -37,8 +38,10 @@
         neotree
         org-bullets
         org-plus-contrib
+        org-recur
         org-super-agenda
         projectile
+        restart-emacs
         vterm
         windmove
         xelb

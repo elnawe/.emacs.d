@@ -1,5 +1,7 @@
 ;; TODO: org-agenda to open projects based on TAGS
 ;; TODO: Use org-super-agenda ^
+;; TODO: New calendar entry is only for PERSONAL calendar. Need to create
+;; a function to make it so I can add new entries to other calendars.
 
 (require 'idle-org-agenda)
 (require 'org)
@@ -16,6 +18,7 @@
   (idle-org-agenda-mode))
 
 (with-eval-after-load 'org
+  (require 'org-recur)
   (require 'nemacs-org-ledger)
 
   (defun nemacs-setup-org-mode ()
@@ -30,6 +33,8 @@
 
   (global-set-key (kbd "C-c l") #'org-store-link)
 
+  (org-recur-mode)
+
   (setq org-archive-location (nemacs-org-file "archive.org::datetree/")
         org-blank-before-new-entry '((heading . nil)
                                      (plain-list-item . nil))
@@ -40,6 +45,7 @@
         org-ellipsis " […]"
         org-fontify-done-headline t
         org-fontify-whole-heading-line t
+        org-return-follows-link t
         org-startup-folded nil
         org-startup-truncated nil
         org-support-shift-select 'always
@@ -127,6 +133,7 @@ if the current task doesn't have one."
   (setq org-agenda-category-icon-alist
         '(("INBOX" "~/.emacs.d/icons/org/inbox.png" nil nil :ascent center)
           ("ITX" "~/.emacs.d/icons/org/itx.png" nil nil :ascent center)
+          ("PERSONAL" "~/.emacs.d/icons/org/personal.png" nil nil :ascent center)
           ("TODO" "~/.emacs.d/icons/org/work.png" nil nil :ascent center)
           (".*" '(space . (:width (16))))))
 
@@ -160,33 +167,46 @@ if the current task doesn't have one."
            ((todo "" ((org-agenda-files `(,org-default-notes-file))
                       (org-agenda-overriding-header "GTD Review: Inbox")
                       (org-agenda-sorting-strategy
-                       '(priority-up effort-down))))))))
-
-  (zenburn-with-color-variables
-    (custom-set-faces
-     `(org-agenda-date ((t (:foreground ,zenburn-fg-05))))
-     `(org-agenda-date-today
-       ((t (:bold t :foreground ,zenburn-yellow-2 :height 175 :italic nil))))
-     `(org-agenda-date-weekend ((t (:bold t :foreground ,zenburn-fg-05))))
-     `(org-time-grid ((t (:foreground ,zenburn-yellow)))))))
+                       '(priority-up effort-down)))))))))
 
 (with-eval-after-load 'org-bullets
   (setq org-bullets-bullet-list '("▲" "●" "■" "✶" "◉" "○" "○")
         org-bullets-face-name 'variable-pitch))
 
 (with-eval-after-load 'org-capture
+  (defvar nemacs-org-calendar-capture-template
+    "* %(nemacs-org-prompt-for-recurrence) %^{Event summary}
+SCHEDULED: %^{Event date}t
+%?")
+
+  (defun nemacs-org-prompt-for-recurrence ()
+    (let ((recurrence (read-string "Event recurrence:
+- +2: Every other day.
+- +w: Every week.
+- Thu: Every Thursday
+- Sun,Sat: Every Sunday and Saturday
+- Wkdy: Every weekday
+- <day of the month> (i.e. 1): That day of every month
+
+Enter Recurrence and press RET: ")))
+      (if (not (string-empty-p recurrence))
+          (concat "|" recurrence "|")
+        "")))
+
   (defun nemacs-org-capture-TODO ()
     "Captures a new `TODO'. Same as `C-c c T'"
     (interactive)
     (org-capture :keys "T"))
 
-  (global-set-key (kbd "s-N") #'nemacs-org-capture-TODO)
   (global-set-key (kbd "C-c c") #'org-capture)
 
   (setq org-capture-templates
         `(("T" "Create a TODO task"
            entry (file ,org-default-notes-file)
-           "* TODO %?"))))
+           "* TODO %?")
+          ("c" "New Calendar entry"
+           entry (file+headline ,(nemacs-org-file "calendar.org") "PERSONAL")
+           ,nemacs-org-calendar-capture-template))))
 
 (with-eval-after-load 'org-id
   (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id

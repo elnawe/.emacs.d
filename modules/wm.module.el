@@ -122,6 +122,7 @@ also copied into the clipboard."
           ([S-s-right]            . buf-move-right)
 
           ([?\s-I]                . nemacs-org-ledger-open)
+          ([XF86Favorites]        . nemacs-org-ledger-open)
           ([?\s-N]                . nemacs-org-capture-TODO)
           ([?\s-b]                . nemacs-exwm-switch-to-previous-buffer)
           ([?\s-B]                . helm-exwm)

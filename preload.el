@@ -15,6 +15,7 @@
               frame-title-format "NEMACS"
               help-window-select t
               highlight-nonselected-windows nil
+              hl-line-sticky-flag t
               fringe-indicator-alist (delq
                                       (assq 'continuation fringe-indicator-alist)
                                       fringe-indicator-alist)
@@ -90,3 +91,5 @@
       initial-major-mode 'fundamental-mode
       initial-scratch-message nil
       inhibit-startup-message t)
+
+(toggle-frame-fullscreen)

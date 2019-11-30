@@ -2,6 +2,7 @@
 (require 'beacon)
 (require 'dashboard)
 (require 'doom-modeline)
+(require 'nemacs-notmuch-unread)
 
 (with-eval-after-load 'all-the-icons
   (setq all-the-icons-mode-icon-alist
@@ -22,7 +23,16 @@
   (add-hook 'after-init-hook #'dashboard-refresh-buffer)
   (add-hook 'dashboard-mode-hook #'nemacs-dashboard-banner)
 
-  (setq dashboard-startup-banner 'logo)
+  (setq dashboard-center-content t
+        dashboard-set-heading-icons t
+        dashboard-set-file-icons t
+        dashboard-startup-banner 'logo
+        show-week-agenda-p t)
+
+  (setq dashboard-items
+        '((bookmarks . 5)
+          (projects . 5)
+          (agenda . 5)))
 
   (dashboard-setup-startup-hook))
 
@@ -39,8 +49,10 @@
   (setq doom-modeline-buffer-file-name-style 'buffer-name
         doom-modeline-buffer-encoding nil
         doom-modeline-height 25
-        doom-modeline-icon t)
+        doom-modeline-icon t
+        doom-modeline-project-detection 'projectile)
 
-  (display-time-mode)
-  (fancy-battery-mode)
+  (display-time-mode 1)
+  (fancy-battery-mode 1)
+  (nemacs-notmuch-unread-mode 1)
   (doom-modeline-mode))

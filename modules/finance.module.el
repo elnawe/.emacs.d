@@ -11,4 +11,4 @@
 
   (add-hook 'ledger-mode-hook #'nemacs-setup-ledger-mode)
 
-  (setq ledger-master-file (nemacs-ledger-file "booking.ledger"))
+  (setq ledger-master-file (nemacs-ledger-file "booking.ledger")))
