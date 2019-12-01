@@ -5,9 +5,11 @@
 
   (defun nemacs-setup-ledger-mode ()
     "NEMACS Setup: Run this function in `ledger-mode-hook'."
-    (setq-local complete-cycle-threshold t
-                ledger-complete-in-steps t
-                tab-always-indent 'complete))
+    (company-mode)
+    (setq-mode-local ledger-mode
+                     complete-cycle-threshold t
+                     ledger-complete-in-steps t
+                     tab-always-indent 'complete))
 
   (add-hook 'ledger-mode-hook #'nemacs-setup-ledger-mode)
 

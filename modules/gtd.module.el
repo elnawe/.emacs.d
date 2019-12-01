@@ -1,5 +1,3 @@
-;; TODO: org-agenda to open projects based on TAGS
-;; TODO: Use org-super-agenda ^
 ;; TODO: New calendar entry is only for PERSONAL calendar. Need to create
 ;; a function to make it so I can add new entries to other calendars.
 
@@ -9,6 +7,7 @@
 (require 'org-bullets)
 (require 'org-capture)
 (require 'org-id)
+(require 'org-recur)
 (require 'org-super-agenda)
 
 (with-eval-after-load 'idle-org-agenda
@@ -18,22 +17,30 @@
   (idle-org-agenda-mode))
 
 (with-eval-after-load 'org
-  (require 'org-recur)
   (require 'nemacs-org-ledger)
+
+  (defun nemacs-org-journal-capture-weekly ()
+    "Captures a weekly entry for the Journal. Same as `C-c c J w'."
+    (interactive)
+    (org-capture :keys "Jw"))
+
+  (defun nemacs-org-journal-capture-monthly ()
+    "Captures a monthly entry for the Journal. Same as `C-c c J m'."
+    (interactive)
+    (org-capture :keys "Jm"))
 
   (defun nemacs-setup-org-mode ()
     "NEMACS Setup: Run this function in `org-mode-hook'"
     (flyspell-mode)
     (org-bullets-mode)
     (org-indent-mode)
+    (org-recur-mode)
     (turn-on-visual-line-mode)
     (setq-local line-spacing 0.1))
 
   (add-hook 'org-mode-hook #'nemacs-setup-org-mode)
 
   (global-set-key (kbd "C-c l") #'org-store-link)
-
-  (org-recur-mode)
 
   (setq org-archive-location (nemacs-org-file "archive.org::datetree/")
         org-blank-before-new-entry '((heading . nil)
@@ -92,13 +99,24 @@
            ("PROJECT"  . ,zenburn-magenta)
            ("WAITING"  . ,zenburn-cyan)
            ("DONE"     . ,zenburn-green)
-           ("CANCELED" . ,zenburn-red-1)))))
+           ("CANCELED" . ,zenburn-red-1)
+
+           ;; Special states
+           ("JOURNAL"  . ,zenburn-blue-2))))
 
 (with-eval-after-load 'org-agenda
   (defun nemacs-setup-org-agenda-mode ()
     "NEMACS Setup: Run this function in `org-agenda-mode-hook'."
     (hl-line-mode)
+    (org-recur-agenda-mode)
     (setq-local line-spacing 0.2))
+
+  (defun nemacs-org-agenda-refresh ()
+    "Refresh all `org-agenda' buffers."
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+        (when (derived-mode-p 'org-agenda-mode)
+          (org-agenda-maybe-redo)))))
 
   (defun nemacs-org-agenda-capture-related (&optional args)
     "Captures a new TODO related to the one at point.
@@ -124,6 +142,10 @@ if the current task doesn't have one."
 
   (add-hook 'org-agenda-mode-hook #'nemacs-setup-org-agenda-mode)
 
+  (defadvice org-schedule (after refresh-agenda activate)
+    "Refresh `org-agenda' with `nemacs-org-agenda-refresh'."
+    (nemacs-org-agenda-refresh))
+
   (define-key org-agenda-mode-map "T" #'nemacs-org-agenda-capture-related)
   (define-key org-agenda-mode-map "t" #'nemacs-org-capture-TODO)
 
@@ -147,6 +169,14 @@ if the current task doesn't have one."
                                     1300 1400 1500 1600 1800 2000)
                                "......" "----------------"))
 
+  ;; Note: `org-recur' recommended
+  (define-key org-recur-mode-map (kbd "C-c d") #'org-recur-finish)
+  (define-key org-recur-agenda-mode-map "d" #'org-recur-finish)
+  (setq org-log-done 'time
+        org-log-redeadline nil
+        org-log-reschedule nil
+        org-read-date-prefer-future 'time)
+
   (setq org-agenda-custom-commands
         `(("t" "Today @ work"
            ((agenda "" ((org-agenda-overriding-header "Today")
@@ -167,7 +197,7 @@ if the current task doesn't have one."
            ((todo "" ((org-agenda-files `(,org-default-notes-file))
                       (org-agenda-overriding-header "GTD Review: Inbox")
                       (org-agenda-sorting-strategy
-                       '(priority-up effort-down)))))))))
+                       '(priority-up effort-down))))))))))
 
 (with-eval-after-load 'org-bullets
   (setq org-bullets-bullet-list '("▲" "●" "■" "✶" "◉" "○" "○")
@@ -179,14 +209,19 @@ if the current task doesn't have one."
 SCHEDULED: %^{Event date}t
 %?")
 
+  (defvar nemacs-org-calendar-itx-capture-template
+    "* %(nemacs-org-prompt-for-recurrence) %^{Event summary} %?
+SCHEDULED: %^{Event date}t %^{ORGANIZER}p %^{LOCATION}p")
+
   (defun nemacs-org-prompt-for-recurrence ()
     (let ((recurrence (read-string "Event recurrence:
 - +2: Every other day.
 - +w: Every week.
-- Thu: Every Thursday
-- Sun,Sat: Every Sunday and Saturday
-- Wkdy: Every weekday
-- <day of the month> (i.e. 1): That day of every month
+- Thu: Every Thursday.
+- Sun,Sat: Every Sunday and Saturday.
+- Wkdy: Every weekday.
+- <day of the month> (i.e. 1): That day of every month.
+- <Empty> will not add recurrence.
 
 Enter Recurrence and press RET: ")))
       (if (not (string-empty-p recurrence))
@@ -204,9 +239,22 @@ Enter Recurrence and press RET: ")))
         `(("T" "Create a TODO task"
            entry (file ,org-default-notes-file)
            "* TODO %?")
-          ("c" "New Calendar entry"
+          ("C" "New Calendar entry in")
+          ("Cp" "The personal calendar"
            entry (file+headline ,(nemacs-org-file "calendar.org") "PERSONAL")
-           ,nemacs-org-calendar-capture-template))))
+           ,nemacs-org-calendar-capture-template)
+          ("Ci" "The ITX calendar"
+           entry (file+headline ,(nemacs-org-file "calendar.org") "ITX")
+           ,nemacs-org-calendar-itx-capture-template)
+          ("J" "New Journal entry with type")
+          ("Jw" "Weekly"
+           entry (file+datetree ,(nemacs-org-file "journal.org"))
+           (file ,(nemacs-org-template "weekly.org"))
+           :immediate-finish t :jump-to-captured t)
+          ("Jm" "Monthly"
+           entry (file+datetree ,(nemacs-org-file "journal.org"))
+           (file ,(nemacs-org-template "monthly.org"))
+           :immediate-finish t :jump-to-captured t))))
 
 (with-eval-after-load 'org-id
   (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id

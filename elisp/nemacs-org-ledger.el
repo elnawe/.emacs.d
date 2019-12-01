@@ -23,12 +23,19 @@
 (defvar nemacs-org-dir (concat nemacs-dropbox-dir "Notes/")
   "Default directory for all the Org files related to notes.")
 
+(defvar nemacs-org-template-dir (concat nemacs-dropbox-dir "org/templates/")
+  "Directory where all the `org-mode' templates are saved.")
+
 (defvar nemacs-ledger-dir (concat nemacs-dropbox-dir "Finances")
   "Default directory for all the Ledger files related to finances.")
 
 (defun nemacs-org-file (filename)
   "Expands from `nemacs-org-dir', appending `filename'."
   (expand-file-name filename nemacs-org-dir))
+
+(defun nemacs-org-template (filename)
+  "Expands from `nemacs-org-template-dir', appending `filename'."
+  (expand-file-name filename nemacs-org-template-dir))
 
 (defun nemacs-ledger-file (filename)
   "Expands from `nemacs-ledger-dir', appending `filename'."
@@ -39,13 +46,15 @@
 pressing a key."
   (interactive)
   (let ((option (read-char "Open file:
-[b]ooking\t\t [c]alendar\t\t [i]nbox\t\t [t]odo\t\t [q]uit")))
+[b]ooking\t\t [c]alendar\t\t [i]nbox\t\t [j]ournal\t\t [t]odo\t\t [q]uit")))
     (cond ((char-equal option (string-to-char "b"))
            (find-file (nemacs-ledger-file "booking.ledger")))
           ((char-equal option (string-to-char "c"))
            (find-file (nemacs-org-file "calendar.org")))
           ((char-equal option (string-to-char "i"))
            (find-file (nemacs-org-file "inbox.org")))
+          ((char-equal option (string-to-char "j"))
+           (find-file (nemacs-org-file "journal.org")))
           ((char-equal option (string-to-char "t"))
            (find-file (nemacs-org-file "todo.org")))
           (t
