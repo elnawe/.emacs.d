@@ -32,9 +32,10 @@
    `(org-agenda-structure
      ((t (:bold t :foreground ,zenburn-fg+1 :height 200 :underline t))))
    `(org-ellipsis ((t (:bold t :foreground ,zenburn-fg :underline nil))))
-   `(org-headline-done ((t (:strike-through t))))
+   `(org-headline-done ((t (:foreground ,zenburn-fg :strike-through t))))
    `(org-level-1 ((t (:bold t :foreground ,zenburn-fg))))
    `(org-level-2 ((t (:foreground ,zenburn-fg :italic t))))
+   `(org-level-3 ((t (:foreground ,zenburn-fg :italic t))))
    `(org-recur ((t (:bold t :box t :foreground ,zenburn-fg-05))))
    `(org-scheduled ((t (:foreground ,zenburn-fg))))
    `(org-tag ((t (:foreground ,zenburn-cyan))))
