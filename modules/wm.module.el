@@ -47,9 +47,12 @@ plugged in.")
       (nemacs-exwm-switch-external-screen)))
 
   (defun nemacs-exwm-xrandr-check-update-monitor ()
-    "Run this function when disconnecting and connecting a monitor. This will move everything
-from the workspace of that monitor into the laptop screen."
-    (let ((monitors (string-to-number (shell-command-to-string "xrandr --listactivemonitors | wc -l"))))
+    "Run this function when disconnecting and connecting a
+monitor. This will move everything from the workspace of that
+monitor into the laptop screen."
+    (let ((monitors (string-to-number
+                     (shell-command-to-string
+                      "xrandr --listactivemonitors | wc -l"))))
       (if (eq monitors 2)
           (setq nemacs-exwm-external-monitor-active nil)
         (setq nemacs-exwm-external-monitor-active t))
@@ -61,8 +64,8 @@ from the workspace of that monitor into the laptop screen."
         (nemacs-exwm-switch-to-laptop-screen))))
 
   (defun nemacs-exwm-take-screenshot ()
-    "Starts `scrot' to take a screenshot. The screenshot is saved in `/tmp/' and
-also copied into the clipboard."
+    "Starts `scrot' to take a screenshot. The screenshot is saved
+in `/tmp/' and also copied into the clipboard."
     (interactive)
     (shell-command
      (concat
@@ -79,9 +82,24 @@ also copied into the clipboard."
     (interactive)
     (switch-to-buffer (other-buffer (current-buffer) 1)))
 
+  (defun nemacs-exwm-logout ()
+    "Log out from current session. Only to be called in
+`nemacs-exwm-kill-emacs'"
+    (shell-command "xfce4-session-logout"))
+
+  (defun nemacs-exwm-save-buffers-kill-emacs ()
+    "After closing Emacs, log out from currenct session"
+    (interactive)
+    (let ((kill-emacs-hook
+           (append kill-emacs-hook
+                   (list (apply-partially #'nemacs-exwm-logout)))))
+      (save-buffers-kill-emacs)))
+
   (add-hook 'exwm-update-title-hook #'nemacs-exwm-rename-buffer)
   (add-hook 'exwm-floating-setup-hook #'exwm-layout-hide-mode-line)
   (add-hook 'exwm-randr-refresh-hook #'nemacs-exwm-xrandr-check-update-monitor)
+
+  (global-set-key (kbd "C-x C-c") #'nemacs-exwm-save-buffers-kill-emacs)
 
   (define-key exwm-mode-map (kbd "C-q") #'exwm-input-send-next-key)
 
