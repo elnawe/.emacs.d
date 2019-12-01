@@ -1,7 +1,3 @@
-;; TODO: Test the new implementation on exwm-randr-refresh-hook.
-;; TODO: Fix logout while closing NEMACS.
-;; TODO: Run needed commands after init from Emacs instead of XFCE4
-
 (require 'exwm)
 
 (with-eval-after-load 'exwm
