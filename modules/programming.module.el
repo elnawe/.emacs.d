@@ -2,7 +2,7 @@
 (require 'fill-column-indicator)
 
 (with-eval-after-load 'company
-  (company-mode)
+  (add-hook 'prog-mode-hook #'company-mode-on)
 
   (define-key company-active-map (kbd "M-p") nil)
   (define-key company-active-map (kbd "M-n") nil)
