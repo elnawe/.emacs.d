@@ -62,6 +62,9 @@
 
   (global-set-key (kbd "C-x m") #'notmuch)
 
+  (setq notmuch-show-all-multipart/alternative-parts t
+        notmuch-show-indent-multipart t)
+
   (setq notmuch-multipart/alternative-discouraged '("text/plain")
         notmuch-saved-searches
         '((:name "inbox" :query "tag:inbox" :key "i")

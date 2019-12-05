@@ -11,9 +11,12 @@
    `(fringe ((t (:background ,zenburn-bg-05))))
    `(fancy-battery-charging ((t (:bold t :foreground ,zenburn-fg+1))))
    `(fancy-battery-discharging ((t (:bold t :foreground ,zenburn-yellow))))
+   `(gnus-summary-normal-ancient ((t (:foreground ,zenburn-fg))))
+   `(gnus-summary-normal-read ((t (:foreground ,zenburn-fg-05))))
+   `(gnus-summary-normal-ticked ((t (:bold t :foreground ,zenburn-yellow))))
    `(helm-candidate-number
      ((t (:background ,zenburn-green-5 :foreground ,zenburn-fg))))
-   `(hl-line ((t (:background ,zenburn-bg+1))))
+   `(hl-line ((t (:background ,zenburn-bg))))
    `(message-cited-text ((t (:foreground ,zenburn-fg-05))))
    `(message-header-name
      ((t (:bold t :foreground ,zenburn-yellow-2))))
@@ -24,13 +27,14 @@
    `(mode-line
      ((t (:background ,zenburn-green-5 :foreground ,zenburn-fg+1 :box nil))))
    `(mode-line-buffer-id ((t (:foreground ,zenburn-yellow))))
-   `(org-agenda-date ((t (:foreground ,zenburn-fg-05))))
+   `(notmuch-tag-face ((t (:foreground ,zenburn-magenta))))
+   `(org-agenda-date ((t (:foreground ,zenburn-fg-05 :height 120))))
    `(org-agenda-date-today
      ((t (:foreground ,zenburn-fg :height 150 :italic nil))))
    `(org-agenda-date-weekend ((t (:bold t :foreground ,zenburn-fg-05))))
    `(org-agenda-done ((t (:strike-through t))))
    `(org-agenda-structure
-     ((t (:bold t :foreground ,zenburn-fg+1 :height 200 :underline t))))
+     ((t (:bold t :foreground ,zenburn-fg+1 :height 200))))
    `(org-ellipsis ((t (:bold t :foreground ,zenburn-fg :underline nil))))
    `(org-headline-done ((t (:foreground ,zenburn-fg :strike-through t))))
    `(org-level-1 ((t (:bold t :foreground ,zenburn-fg))))
@@ -38,8 +42,10 @@
    `(org-level-3 ((t (:foreground ,zenburn-fg :italic t))))
    `(org-recur ((t (:bold t :box t :foreground ,zenburn-fg-05))))
    `(org-scheduled ((t (:foreground ,zenburn-fg))))
+   `(org-scheduled-previously ((t (:foreground ,zenburn-red+2 :italic t))))
+   `(org-scheduled-today ((t (:foreground ,zenburn-fg+1))))
    `(org-tag ((t (:foreground ,zenburn-cyan))))
-   `(org-time-grid ((t (:foreground ,zenburn-yellow))))
+   `(org-time-grid ((t (:foreground ,zenburn-green+4 :height 90))))
    `(org-todo ((t (:underline t))))
    `(powerline-active0
      ((t (:background ,zenburn-green-5 :foreground ,zenburn-fg+1))))
@@ -48,7 +54,7 @@
    `(powerline-active2
      ((t (:background ,zenburn-green-5 :foreground ,zenburn-fg+1))))
    `(region ((t (:background ,zenburn-green :foreground ,zenburn-bg-2))))
-   `(variable-pitch ((t (:height 60))))
+   `(variable-pitch ((t (:height 100))))
 
    `(mode-line-buffer-id-inactive ((t (:foreground ,zenburn-fg-05))))
    `(mode-line-inactive

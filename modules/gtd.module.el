@@ -1,5 +1,6 @@
 ;; TODO: New calendar entry is only for PERSONAL calendar. Need to create
 ;; a function to make it so I can add new entries to other calendars.
+;; TODO: Add new capture template for tech specs
 
 (require 'idle-org-agenda)
 (require 'org)
@@ -11,8 +12,8 @@
 (require 'org-super-agenda)
 
 (with-eval-after-load 'idle-org-agenda
-  (setq idle-org-agenda-interval 600
-        idle-org-agenda-key "t")
+  (setq idle-org-agenda-interval 3000
+        idle-org-agenda-key "d")
 
   (idle-org-agenda-mode))
 
@@ -39,6 +40,8 @@
     (setq-local line-spacing 0.1))
 
   (add-hook 'org-mode-hook #'nemacs-setup-org-mode)
+  (add-hook 'org-after-refile-insert-hook #'org-save-all-org-buffers)
+  (add-hook 'org-archive-hook #'org-save-all-org-buffers)
 
   (global-set-key (kbd "C-c l") #'org-store-link)
 
@@ -60,28 +63,28 @@
 
   (setq org-refile-allow-creating-parent-nodes 'confirm
         org-refile-targets `(((,org-default-notes-file
+                               ,(nemacs-org-file "maybe.org")
                                ,(nemacs-org-file "todo.org")) :level . 1))
         org-refile-use-outline-path 'file)
 
   (setq org-tag-persistent-alist
-        '(;; Action
-          ("%BUG"    . ?B)
-          ("%STORY"  . ?S)
-          ("%TRIAGE" . ?T)
-          ("%WIKI"   . ?W)
+        '(;; Context
+          ("@computer" . ?c)
+          ("@emacs"    . ?e)
+          ("@gameroom" . ?g)
+          ("@home"     . ?h)
+          ("@meeting"  . ?m)
+          ("@office"   . ?o)
+          ("@wiki"     . ?w)
 
-         ;; Context
-         ("@computer" . ?c)
-         ("@emacs"    . ?e)
-         ("@gameroom" . ?g)
-         ("@home"     . ?h)
-         ("@meeting"  . ?m)
-         ("@office"   . ?o)
+          ;; Projects
+          ("Personal"         . ?P)
+          ("CompanyDirectory" . ?C)
+          ("Retirement"       . ?R)
 
-         ;; Projects
-         ("#OK"       . ?O)
-         ("#PERSONAL" . ?P)
-         ("#ROR"      . ?R)))
+          ;; Teams
+          ("OK"  . ?x)
+          ("ROR" . ?z)))
 
  (setq org-todo-keywords
        '((sequence "TODO(t!)"
@@ -135,10 +138,10 @@ if the current task doesn't have one."
       (call-interactively #'org-store-link)
       (org-capture :keys "L")))
 
-  (defun nemacs-org-agenda-open-work-agenda ()
-    "Opens the Work Agenda. Same as: `C-c a t'."
+  (defun nemacs-org-agenda-open-default-agenda ()
+    "Opens the default NEMACS Agenda."
     (interactive)
-    (org-agenda :keys "t"))
+    (org-agenda :keys "d"))
 
   (add-hook 'org-agenda-mode-hook #'nemacs-setup-org-agenda-mode)
 
@@ -149,27 +152,30 @@ if the current task doesn't have one."
   (define-key org-agenda-mode-map "T" #'nemacs-org-agenda-capture-related)
   (define-key org-agenda-mode-map "t" #'nemacs-org-capture-TODO)
 
-  (global-set-key (kbd "C-c a") #'org-agenda)
-  (global-set-key (kbd "C-c T") #'nemacs-org-agenda-open-work-agenda)
+  (global-set-key (kbd "C-c a") #'nemacs-org-agenda-open-default-agenda)
 
   (setq org-agenda-category-icon-alist
-        '(("INBOX" "~/.emacs.d/icons/org/inbox.png" nil nil :ascent center)
+        '(("ANNIVERSARIES" "~/.emacs.d/icons/org/birthday.png" nil nil :ascent center)
+          ("HOLIDAY" "~/.emacs.d/icons/org/holiday.png" nil nil :ascent center)
+          ("INBOX" "~/.emacs.d/icons/org/inbox.png" nil nil :ascent center)
           ("ITX" "~/.emacs.d/icons/org/itx.png" nil nil :ascent center)
           ("PERSONAL" "~/.emacs.d/icons/org/personal.png" nil nil :ascent center)
+          ("PROJECT" "~/.emacs.d/icons/org/project.png" nil nil :ascent center)
           ("TODO" "~/.emacs.d/icons/org/work.png" nil nil :ascent center)
           (".*" '(space . (:width (16))))))
 
   (setq org-agenda-default-appointment-duration 60
         org-agenda-files `(,org-default-notes-file
                            ,(nemacs-org-file "todo.org")
+                           ,(nemacs-org-file "projects.org")
                            ,(nemacs-org-file "calendar.org"))
         org-agenda-start-on-weekday 0
         org-agenda-time-grid '((daily today required-time remove-match)
-                               (700 800 900 1000 1100 1200
-                                    1300 1400 1500 1600 1800 2000)
+                               (600 800 1000 1200 1400 1600)
                                "......" "----------------"))
 
   ;; Note: `org-recur' recommended
+  ;; TODO: Change "d" to mark as DONE and archive if it doesn't have org-recur.
   (define-key org-recur-mode-map (kbd "C-c d") #'org-recur-finish)
   (define-key org-recur-agenda-mode-map "d" #'org-recur-finish)
   (setq org-log-done 'time
@@ -178,26 +184,29 @@ if the current task doesn't have one."
         org-read-date-prefer-future 'time)
 
   (setq org-agenda-custom-commands
-        `(("t" "Today @ work"
-           ((agenda "" ((org-agenda-overriding-header "Today")
-                        (org-agenda-span 'day)
+        `(("d" "NEMACS Agenda"
+           ((agenda "" ((org-agenda-span 'day)
                         (org-super-agenda-groups
-                         '((:name none :time-grid t)))))
-            (todo "" ((org-agenda-overriding-header "Project: #ROR")
+                         '((:name "Calendar" :time-grid t)))))
+            (todo "" ((org-agenda-overriding-header "Stuck Projects")
+                      (org-super-agenda-groups
+                       '((:name none :children t
+                                :discard (:anything t))))))
+            (todo "" ((org-agenda-overriding-header "Company Directory")
+                      (org-agenda-hide-tags-regexp "CompanyDirectory")
                       (org-super-agenda-groups
                        '((:name none
-                                :and (:tag "#ROR" :scheduled nil))
+                                :and (:tag "CompanyDirectory" :scheduled nil
+                                           :not (:todo "PROJECT")))
                          (:discard (:anything t))))))
-            (todo "" ((org-agenda-overriding-header "Project: #OK")
+            (todo "" ((org-agenda-overriding-header "Retirement")
+                      (org-agenda-hide-tags-regexp "Retirement")
                       (org-super-agenda-groups
                        '((:name none
-                                :and (:tag "#OK" :scheduled nil))
-                         (:discard (:anything t))))))))
-          ("r" "Review inbox"
-           ((todo "" ((org-agenda-files `(,org-default-notes-file))
-                      (org-agenda-overriding-header "GTD Review: Inbox")
-                      (org-agenda-sorting-strategy
-                       '(priority-up effort-down))))))))))
+                                :and (:tag "Retirement" :scheduled nil))
+                         (:discard (:anything t))))))
+            (todo "" ((org-agenda-overriding-header "Inbox")
+                      (org-agenda-files `(,org-default-notes-file))))))))))
 
 (with-eval-after-load 'org-bullets
   (setq org-bullets-bullet-list '("▲" "●" "■" "✶" "◉" "○" "○")
@@ -206,12 +215,12 @@ if the current task doesn't have one."
 (with-eval-after-load 'org-capture
   (defvar nemacs-org-calendar-capture-template
     "* %(nemacs-org-prompt-for-recurrence) %^{Event summary}
-SCHEDULED: %^{Event date}t
+%^{Event date}t
 %?")
 
   (defvar nemacs-org-calendar-itx-capture-template
     "* %(nemacs-org-prompt-for-recurrence) %^{Event summary} %?
-SCHEDULED: %^{Event date}t %^{ORGANIZER}p %^{LOCATION}p")
+%^{Event date}t %^{ORGANIZER}p %^{LOCATION}p")
 
   (defun nemacs-org-prompt-for-recurrence ()
     (let ((recurrence (read-string "Event recurrence:

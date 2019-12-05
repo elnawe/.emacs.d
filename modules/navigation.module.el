@@ -4,7 +4,13 @@
   (require 'helm-config)
   (require 'helm-lastpass)
 
+  (defun nemacs-setup-helm-mode ()
+    "NEMACS Setup: Run this function in `helm-mode-hook'."
+    (setq-local line-spacing 0.2))
+
   (helm-mode t)
+
+  (add-hook 'helm-major-mode-hook #'nemacs-setup-helm-mode)
 
   (define-key helm-map (kbd "TAB") #'helm-maybe-exit-minibuffer)
   (define-key helm-map (kbd "C-<backspace>") #'backward-kill-word)

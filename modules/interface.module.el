@@ -1,3 +1,5 @@
+;; TODO: Create own mode-line instead of using doom-modeline
+
 (require 'all-the-icons)
 (require 'beacon)
 (require 'dashboard)
@@ -7,7 +9,10 @@
 (with-eval-after-load 'all-the-icons
   (setq all-the-icons-mode-icon-alist
         `(,@all-the-icons-mode-icon-alist
-          (exwm-mode all-the-icons-faicon "laptop"))))
+          (exwm-mode all-the-icons-faicon "laptop")
+          (notmuch-hello-mode all-the-icons-faicon "envelope")
+          (notmuch-search-mode all-the-icons-faicon "envelope")
+          (notmuch-show-mode all-the-icons-faicon "envelope"))))
 
 (with-eval-after-load 'beacon
   (beacon-mode))
