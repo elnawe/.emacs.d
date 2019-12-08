@@ -23,10 +23,8 @@
         buffer-move
         company
         dashboard
-        doom-modeline
         exwm
         fancy-battery
-        fill-column-indicator
         helm
         helm-exwm
         helm-lastpass

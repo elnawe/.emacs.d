@@ -81,7 +81,7 @@ in `/tmp/' and also copied into the clipboard."
   (defun nemacs-exwm-logout ()
     "Log out from current session. Only to be called in
 `nemacs-exwm-kill-emacs'"
-    (shell-command "xfce4-session-logout"))
+    (async-shell-command "xfce4-session-logout"))
 
   (defun nemacs-exwm-save-buffers-kill-emacs ()
     "After closing Emacs, log out from currenct session"

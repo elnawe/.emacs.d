@@ -3,8 +3,17 @@
 (require 'all-the-icons)
 (require 'beacon)
 (require 'dashboard)
-(require 'doom-modeline)
-(require 'nemacs-notmuch-unread)
+
+(setq battery-update-interval 15
+      column-number-mode t
+      display-time-24hr-format t
+      display-time-default-load-average nil
+      display-time-format "%b %d %H:%M "
+      fancy-battery-show-percentage t
+      line-number-mode t)
+
+(display-time-mode 1)
+(fancy-battery-mode 1)
 
 (with-eval-after-load 'all-the-icons
   (setq all-the-icons-mode-icon-alist
@@ -40,24 +49,3 @@
           (agenda . 5)))
 
   (dashboard-setup-startup-hook))
-
-(with-eval-after-load 'doom-modeline
-  ;; NOTE: Need to set these variables before starting the modes.
-  (setq battery-update-interval 15
-        column-number-mode t
-        display-time-24hr-format t
-        display-time-default-load-average nil
-        display-time-format "%b %d %H:%M "
-        fancy-battery-show-percentage t
-        line-number-mode t)
-
-  (setq doom-modeline-buffer-file-name-style 'buffer-name
-        doom-modeline-buffer-encoding nil
-        doom-modeline-height 25
-        doom-modeline-icon t
-        doom-modeline-project-detection 'projectile)
-
-  (display-time-mode 1)
-  (fancy-battery-mode 1)
-  (nemacs-notmuch-unread-mode 1)
-  (doom-modeline-mode))

@@ -59,7 +59,7 @@
         org-startup-folded nil
         org-startup-truncated nil
         org-support-shift-select 'always
-        org-tags-column -80)
+        org-tags-column -75)
 
   (setq org-refile-allow-creating-parent-nodes 'confirm
         org-refile-targets `(((,org-default-notes-file
@@ -95,17 +95,17 @@
                    "DONE(D@)"
                    "CANCELED(C@)")))
 
- (zenburn-with-color-variables
+ (with-c64-color-variables
    (setq org-todo-keyword-faces
-         `(("TODO"     . ,zenburn-orange)
-           ("CLEARED"  . ,zenburn-yellow)
-           ("PROJECT"  . ,zenburn-magenta)
-           ("WAITING"  . ,zenburn-cyan)
-           ("DONE"     . ,zenburn-green)
-           ("CANCELED" . ,zenburn-red-1)
+         `(("TODO"     . ,c64-8)
+           ("CLEARED"  . ,c64-7)
+           ("PROJECT"  . ,c64-4)
+           ("WAITING"  . ,c64-3)
+           ("DONE"     . ,c64-5)
+           ("CANCELED" . ,c64-2)
 
            ;; Special states
-           ("JOURNAL"  . ,zenburn-blue-2))))
+           ("JOURNAL"  . ,c64-10)))))
 
 (with-eval-after-load 'org-agenda
   (defun nemacs-setup-org-agenda-mode ()
@@ -206,11 +206,11 @@ if the current task doesn't have one."
                                 :and (:tag "Retirement" :scheduled nil))
                          (:discard (:anything t))))))
             (todo "" ((org-agenda-overriding-header "Inbox")
-                      (org-agenda-files `(,org-default-notes-file))))))))))
+                      (org-agenda-files `(,org-default-notes-file)))))))))
 
 (with-eval-after-load 'org-bullets
   (setq org-bullets-bullet-list '("▲" "●" "■" "✶" "◉" "○" "○")
-        org-bullets-face-name 'variable-pitch))
+        org-bullets-face-name 'org-bullets))
 
 (with-eval-after-load 'org-capture
   (defvar nemacs-org-calendar-capture-template
