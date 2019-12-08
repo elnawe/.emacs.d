@@ -36,7 +36,6 @@
         neotree
         org-bullets
         org-plus-contrib
-        org-recur
         org-super-agenda
         projectile
         restart-emacs

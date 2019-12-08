@@ -8,7 +8,6 @@
 (require 'org-bullets)
 (require 'org-capture)
 (require 'org-id)
-(require 'org-recur)
 (require 'org-super-agenda)
 
 (with-eval-after-load 'idle-org-agenda
@@ -35,7 +34,6 @@
     (flyspell-mode)
     (org-bullets-mode)
     (org-indent-mode)
-    (org-recur-mode)
     (turn-on-visual-line-mode)
     (setq-local line-spacing 0.1))
 
@@ -111,7 +109,6 @@
   (defun nemacs-setup-org-agenda-mode ()
     "NEMACS Setup: Run this function in `org-agenda-mode-hook'."
     (hl-line-mode)
-    (org-recur-agenda-mode)
     (setq-local line-spacing 0.2))
 
   (defun nemacs-org-agenda-refresh ()
@@ -155,7 +152,7 @@ if the current task doesn't have one."
   (global-set-key (kbd "C-c a") #'nemacs-org-agenda-open-default-agenda)
 
   (setq org-agenda-category-icon-alist
-        '(("ANNIVERSARIES" "~/.emacs.d/icons/org/birthday.png" nil nil :ascent center)
+        '(("BIRTHDAY" "~/.emacs.d/icons/org/birthday.png" nil nil :ascent center)
           ("HOLIDAY" "~/.emacs.d/icons/org/holiday.png" nil nil :ascent center)
           ("INBOX" "~/.emacs.d/icons/org/inbox.png" nil nil :ascent center)
           ("ITX" "~/.emacs.d/icons/org/itx.png" nil nil :ascent center)
@@ -174,10 +171,12 @@ if the current task doesn't have one."
                                (600 800 1000 1200 1400 1600)
                                "......" "----------------"))
 
-  ;; Note: `org-recur' recommended
-  ;; TODO: Change "d" to mark as DONE and archive if it doesn't have org-recur.
-  (define-key org-recur-mode-map (kbd "C-c d") #'org-recur-finish)
-  (define-key org-recur-agenda-mode-map "d" #'org-recur-finish)
+
+  ;; TODO: I don't need org-recur anymore but might use something similar
+  ;; to mark tasks as done.
+  ;; (define-key org-recur-mode-map (kbd "C-c d") #'org-recur-finish)
+  ;; (define-key org-recur-agenda-mode-map "d" #'org-recur-finish)
+  ;; Keeping these because they are interesting settings.
   (setq org-log-done 'time
         org-log-redeadline nil
         org-log-reschedule nil

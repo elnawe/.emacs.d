@@ -20,6 +20,10 @@
 
 ;;; Code:
 
+(defface nemacs-org-ledger-title '()
+  "Custom face for the `nemacs-org-ledger-open' title."
+  :group 'org-mode)
+
 (defvar nemacs-org-dir (concat nemacs-dropbox-dir "Notes/")
   "Default directory for all the Org files related to notes.")
 
@@ -41,14 +45,35 @@
   "Expands from `nemacs-ledger-dir', appending `filename'."
   (expand-file-name filename nemacs-ledger-dir))
 
+(defun nemacs-org-ledger-formatted-string (string &optional separator)
+  "Uses `string' to run a propertize and return the right value.
+When `separator' is non-nill, will add the character `|' to the result.
+
+For example: Given `string' is inbox, return `[i]nbox'."
+  (let ((entry-key
+         (propertize
+          (concat "[" (substring string 0 1) "]")
+          'face 'bold))
+        (rest-string (substring string 1)))
+    (concat entry-key
+            rest-string
+            (when separator " | "))))
+
 (defun nemacs-org-ledger-open ()
   "Prompts to open a file related to some NEMACS modules by just
 pressing a key."
   (interactive)
-  (let ((option (read-char "Open file:
-
-[b]ooking | [c]alendar | [i]nbox | [j]ournal | [p]rojects | [t]odo | [q]uit
-")))
+  (let ((option
+         (read-char
+          (concat
+           (propertize  "Open file:\n"
+                        'face 'nemacs-org-ledger-title)
+           (nemacs-org-ledger-formatted-string "booking" t)
+           (nemacs-org-ledger-formatted-string "calendar" t)
+           (nemacs-org-ledger-formatted-string "inbox" t)
+           (nemacs-org-ledger-formatted-string "journal" t)
+           (nemacs-org-ledger-formatted-string "todo" t)
+           (nemacs-org-ledger-formatted-string "quit")))))
     (cond ((char-equal option (string-to-char "b"))
            (find-file (nemacs-ledger-file "booking.ledger")))
           ((char-equal option (string-to-char "c"))
@@ -63,5 +88,12 @@ pressing a key."
            (find-file (nemacs-org-file "todo.org")))
           (t
            (keyboard-quit)))))
+
+(with-c64-color-variables
+  (custom-set-faces
+   `(nemacs-org-ledger-title
+     ((t (:background unspecified :bold t
+                      :box (:color ,c64-6 :line-width 6)
+                      :foreground ,c64-1 :height 200))))))
 
 (provide 'nemacs-org-ledger)
