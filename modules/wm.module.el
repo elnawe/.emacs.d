@@ -1,6 +1,7 @@
 (require 'exwm)
 
 (with-eval-after-load 'exwm
+  (require 'exwm-edit)
   (require 'exwm-randr)
   (require 'exwm-systemtray)
   (require 'helm-exwm)
@@ -40,7 +41,7 @@ plugged in.")
     (interactive)
     (when nemacs-exwm-external-monitor-active
       (exwm-workspace-move-window 1 (exwm--buffer->id (window-buffer)))
-      (nemacs-exwm-switch-external-screen)))
+      (nemacs-exwm-switch-to-external-screen)))
 
   (defun nemacs-exwm-xrandr-check-update-monitor ()
     "Run this function when disconnecting and connecting a
@@ -59,19 +60,16 @@ monitor into the laptop screen."
         (exwm-workspace-delete 1)
         (nemacs-exwm-switch-to-laptop-screen))))
 
-  (defun nemacs-exwm-take-screenshot ()
-    "Starts `scrot' to take a screenshot. The screenshot is saved
-in `/tmp/' and also copied into the clipboard."
-    (interactive)
-    (shell-command
-     (concat
-      "scrot "
-      "-s '/tmp/%F_%T_$wx$h.png'")))
-
   (defun nemacs-exwm-run-application (command)
     "Prompts for an application and runs it inside `EXWM'."
     (interactive (list (read-shell-command "> ")))
     (start-process-shell-command command nil command))
+
+  (defun nemacs-exwm-take-screenshot ()
+    "Starts `scrot' to take a screenshot. The screenshot is saved
+in `/tmp/' and also copied into the clipboard."
+    (interactive)
+    (nemacs-exwm-run-application "~/Dropbox/dotfiles/bin/take_screenshot"))
 
   (defun nemacs-exwm-switch-to-previous-buffer ()
     "Switches to the previously opened buffer."
@@ -81,7 +79,9 @@ in `/tmp/' and also copied into the clipboard."
   (defun nemacs-exwm-logout ()
     "Log out from current session. Only to be called in
 `nemacs-exwm-kill-emacs'"
-    (async-shell-command "xfce4-session-logout"))
+    (recentf-save-list)
+    (save-some-buffers)
+    (nemacs-exwm-run-application "xfce4-session-logout"))
 
   (defun nemacs-exwm-save-buffers-kill-emacs ()
     "After closing Emacs, log out from currenct session"
@@ -166,6 +166,11 @@ in `/tmp/' and also copied into the clipboard."
           ([?\M-w] . [?\C-c])
           ([?\C-y] . [?\C-v])))
 
+  ;; Run the Emacs Server
+  (unless (or (daemonp) (server-running-p))
+    (server-start))
+
+  (exwm-edit-mode)
   (exwm-randr-enable)
   (exwm-systemtray-enable)
   (exwm-enable))

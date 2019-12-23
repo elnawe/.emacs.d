@@ -33,16 +33,17 @@
         json-mode
         ledger-mode
         markdown-mode
+        mu4e-alert
         neotree
         org-bullets
         org-plus-contrib
         org-super-agenda
         projectile
         restart-emacs
+        rust-mode
         vterm
         windmove
-        xelb
-        zenburn-theme))
+        xelb))
 
 (when (not package-archive-contents)
   (package-refresh-contents))

@@ -36,7 +36,4 @@
                     gc-cons-percentage 0.1)
 
               (require 'nemacs-ensure-system)
-              (nemacs-ensure-system-check-errors)
-
-              (unless (or (daemonp) (server-running-p))
-                (server-start))))
+              (nemacs-ensure-system-check-errors)))

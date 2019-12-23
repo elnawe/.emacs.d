@@ -1,6 +1,7 @@
+(add-to-list 'custom-theme-load-path nemacs-themes-dir)
 (add-to-list 'custom-theme-load-path (expand-file-name "c64-theme" nemacs-themes-dir))
 
-(set-fontset-font t 'unicode (font-spec :name "Bitstream Vera Sans Mono-12") nil)
-(set-face-font 'default "Bitstream Vera Sans Mono-12")
+(set-fontset-font t 'unicode (font-spec :name "Envy Code R-14") nil)
+(set-face-font 'default "Envy Code R-14")
 
-(load-theme 'c64 t)
+(load-theme 'very-basic t)

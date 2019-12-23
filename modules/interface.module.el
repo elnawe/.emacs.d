@@ -3,6 +3,7 @@
 (require 'all-the-icons)
 (require 'beacon)
 (require 'dashboard)
+(require 'diminish)
 
 (setq battery-update-interval 15
       column-number-mode t
@@ -14,6 +15,26 @@
 
 (display-time-mode 1)
 (fancy-battery-mode 1)
+
+;; Diminish modes
+(diminish 'beacon-mode)
+(diminish 'company-mode " c")
+(diminish 'eldoc-mode)
+(diminish 'helm-mode)
+(diminish 'projectile-mode)
+(diminish 'subword-mode)
+
+(setq-default mode-line-format
+      '("%e"
+        mode-line-front-space
+        mode-line-modified
+        " "
+        mode-line-buffer-identification
+        " "
+        mode-line-position
+        " "
+        mode-line-modes
+        mode-line-misc-info))
 
 (with-eval-after-load 'all-the-icons
   (setq all-the-icons-mode-icon-alist

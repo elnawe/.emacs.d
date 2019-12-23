@@ -1,4 +1,6 @@
 (require 'company)
+(require 'markdown-mode)
+(require 'rust-mode)
 
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-p") nil)

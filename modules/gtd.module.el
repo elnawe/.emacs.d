@@ -93,17 +93,17 @@
                    "DONE(D@)"
                    "CANCELED(C@)")))
 
- (with-c64-color-variables
-   (setq org-todo-keyword-faces
-         `(("TODO"     . ,c64-8)
-           ("CLEARED"  . ,c64-7)
-           ("PROJECT"  . ,c64-4)
-           ("WAITING"  . ,c64-3)
-           ("DONE"     . ,c64-5)
-           ("CANCELED" . ,c64-2)
+ (setq org-todo-keyword-faces
+       `(("TODO"     . "OrangeRed")
+         ("CLEARED"  . "yellow3")
+         ("PROJECT"  . "DarkMagenta")
+         ("WAITING"  . "RoyalBlue")
+         ("DONE"     . "SeaGreen")
+         ("CANCELED" . "DarkRed")
 
-           ;; Special states
-           ("JOURNAL"  . ,c64-10)))))
+         ;; Special states
+         ("JOURNAL"  . "DarkOrange")
+         ("MEETING"  . "SlateBlue3"))))
 
 (with-eval-after-load 'org-agenda
   (defun nemacs-setup-org-agenda-mode ()
@@ -176,10 +176,9 @@ if the current task doesn't have one."
   ;; to mark tasks as done.
   ;; (define-key org-recur-mode-map (kbd "C-c d") #'org-recur-finish)
   ;; (define-key org-recur-agenda-mode-map "d" #'org-recur-finish)
-  ;; Keeping these because they are interesting settings.
   (setq org-log-done 'time
-        org-log-redeadline nil
-        org-log-reschedule nil
+        org-log-redeadline 'note
+        org-log-reschedule 'note
         org-read-date-prefer-future 'time)
 
   (setq org-agenda-custom-commands
@@ -257,12 +256,16 @@ Enter Recurrence and press RET: ")))
           ("J" "New Journal entry with type")
           ("Jw" "Weekly"
            entry (file+datetree ,(nemacs-org-file "journal.org"))
-           (file ,(nemacs-org-template "weekly.org"))
+           (file ,(nemacs-org-template "weekly.tpl.org"))
            :immediate-finish t :jump-to-captured t)
           ("Jm" "Monthly"
            entry (file+datetree ,(nemacs-org-file "journal.org"))
-           (file ,(nemacs-org-template "monthly.org"))
-           :immediate-finish t :jump-to-captured t))))
+           (file ,(nemacs-org-template "monthly.tpl.org"))
+           :immediate-finish t :jump-to-captured t)
+          ("M" "Meeting Notes"
+           entry (file+datetree ,(nemacs-org-file "journal.org"))
+           (file ,(nemacs-org-template "meeting-notes.tpl.org"))
+           :clock-in t :jump-to-captured t))))
 
 (with-eval-after-load 'org-id
   (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id
