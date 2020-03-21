@@ -91,5 +91,3 @@
       initial-major-mode 'fundamental-mode
       initial-scratch-message nil
       inhibit-startup-message t)
-
-(toggle-frame-fullscreen)

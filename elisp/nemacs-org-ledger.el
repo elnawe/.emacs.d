@@ -89,11 +89,10 @@ pressing a key."
           (t
            (keyboard-quit)))))
 
-(with-vb-color-variables
-  (custom-set-faces
-   `(nemacs-org-ledger-title
-     ((t (:background ,vb-background :bold t
-                      :box (:color ,vb-background :line-width 6)
-                      :foreground unspecified :height 200))))))
+(custom-set-faces
+ `(nemacs-org-ledger-title
+   ((t (:background "black" :bold t
+                      :box (:color "black" :line-width 6)
+                      :foreground unspecified :height 200)))))
 
 (provide 'nemacs-org-ledger)
