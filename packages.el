@@ -23,10 +23,9 @@
         buffer-move
         company
         dashboard
-        exwm
+        diminish
         fancy-battery
         helm
-        helm-exwm
         helm-lastpass
         helm-projectile
         idle-org-agenda

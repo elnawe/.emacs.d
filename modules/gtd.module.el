@@ -2,7 +2,7 @@
 ;; a function to make it so I can add new entries to other calendars.
 ;; TODO: Add new capture template for tech specs
 
-(require 'idle-org-agenda)
+;; (require 'idle-org-agenda)
 (require 'org)
 (require 'org-agenda)
 (require 'org-bullets)
@@ -10,11 +10,11 @@
 (require 'org-id)
 (require 'org-super-agenda)
 
-(with-eval-after-load 'idle-org-agenda
-  (setq idle-org-agenda-interval 3000
-        idle-org-agenda-key "d")
+;; (with-eval-after-load 'idle-org-agenda
+;;   (setq idle-org-agenda-interval 3000
+;;         idle-org-agenda-key "d")
 
-  (idle-org-agenda-mode))
+;;   (idle-org-agenda-mode))
 
 (with-eval-after-load 'org
   (require 'nemacs-org-ledger)
@@ -161,15 +161,15 @@ if the current task doesn't have one."
           ("TODO" "~/.emacs.d/icons/org/work.png" nil nil :ascent center)
           (".*" '(space . (:width (16))))))
 
-  (setq org-agenda-default-appointment-duration 60
-        org-agenda-files `(,org-default-notes-file
-                           ,(nemacs-org-file "todo.org")
-                           ,(nemacs-org-file "projects.org")
-                           ,(nemacs-org-file "calendar.org"))
-        org-agenda-start-on-weekday 0
-        org-agenda-time-grid '((daily today required-time remove-match)
-                               (600 800 1000 1200 1400 1600)
-                               "......" "----------------"))
+  ;; (setq org-agenda-default-appointment-duration 60
+  ;;       org-agenda-files `(,org-default-notes-file
+  ;;                          ,(nemacs-org-file "todo.org")
+  ;;                          ,(nemacs-org-file "projects.org")
+  ;;                          ,(nemacs-org-file "calendar.org"))
+  ;;       org-agenda-start-on-weekday 0
+  ;;       org-agenda-time-grid '((daily today required-time remove-match)
+  ;;                              (600 800 1000 1200 1400 1600)
+  ;;                              "......" "----------------"))
 
 
   ;; TODO: I don't need org-recur anymore but might use something similar
