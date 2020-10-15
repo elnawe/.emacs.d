@@ -35,6 +35,7 @@
         markdown-mode
         mu4e-alert
         neotree
+        night-owl-theme
         org-bullets
         org-plus-contrib
         org-super-agenda

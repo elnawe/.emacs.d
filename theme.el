@@ -3,4 +3,4 @@
 (set-fontset-font t 'unicode (font-spec :name "Envy Code R-14") nil)
 (set-face-font 'default "Envy Code R-14")
 
-;;(load-theme 'very-basic t)
+(load-theme 'night-owl t)

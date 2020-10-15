@@ -61,33 +61,22 @@
 
   (setq org-refile-allow-creating-parent-nodes 'confirm
         org-refile-targets `(((,org-default-notes-file
-                               ,(nemacs-org-file "maybe.org")
+                               ,(nemacs-org-file "calendar.org")
                                ,(nemacs-org-file "todo.org")) :level . 1))
         org-refile-use-outline-path 'file)
 
   (setq org-tag-persistent-alist
         '(;; Context
-          ("@computer" . ?c)
-          ("@emacs"    . ?e)
-          ("@gameroom" . ?g)
-          ("@home"     . ?h)
-          ("@meeting"  . ?m)
-          ("@office"   . ?o)
-          ("@wiki"     . ?w)
+          ("@ITX"        . ?I)
+          ("@KILIMO"     . ?K)
 
           ;; Projects
-          ("Personal"         . ?P)
-          ("CompanyDirectory" . ?C)
-          ("Retirement"       . ?R)
-
-          ;; Teams
-          ("OK"  . ?x)
-          ("ROR" . ?z)))
+          ("Personal"    . ?p)
+          ("Loans"       . ?l)
+          ("Investments" . ?i)))
 
  (setq org-todo-keywords
        '((sequence "TODO(t!)"
-                   "CLEARED(c@)"
-                   "PROJECT(p@)"
                    "WAITING(w@)"
                    "|"
                    "DONE(D@)"
@@ -95,8 +84,6 @@
 
  (setq org-todo-keyword-faces
        `(("TODO"     . "OrangeRed")
-         ("CLEARED"  . "yellow3")
-         ("PROJECT"  . "DarkMagenta")
          ("WAITING"  . "RoyalBlue")
          ("DONE"     . "SeaGreen")
          ("CANCELED" . "DarkRed")
@@ -163,9 +150,8 @@ if the current task doesn't have one."
 
   (setq org-agenda-default-appointment-duration 60
         org-agenda-files `(,org-default-notes-file
-                           ,(nemacs-org-file "todo.org")
-                           ,(nemacs-org-file "projects.org")
-                           ,(nemacs-org-file "calendar.org"))
+                           ,(nemacs-org-file "calendar.org")
+                           ,(nemacs-org-file "todo.org"))
         org-agenda-start-on-weekday 0
         org-agenda-time-grid '((daily today required-time remove-match)
                                (600 800 1000 1200 1400 1600)
@@ -190,18 +176,18 @@ if the current task doesn't have one."
                       (org-super-agenda-groups
                        '((:name none :children t
                                 :discard (:anything t))))))
-            (todo "" ((org-agenda-overriding-header "Company Directory")
-                      (org-agenda-hide-tags-regexp "CompanyDirectory")
+            (todo "" ((org-agenda-overriding-header "Loans")
+                      (org-agenda-hide-tags-regexp "Loans")
                       (org-super-agenda-groups
                        '((:name none
-                                :and (:tag "CompanyDirectory" :scheduled nil
+                                :and (:tag "Loans" :scheduled nil
                                            :not (:todo "PROJECT")))
                          (:discard (:anything t))))))
-            (todo "" ((org-agenda-overriding-header "Retirement")
-                      (org-agenda-hide-tags-regexp "Retirement")
+            (todo "" ((org-agenda-overriding-header "Investments")
+                      (org-agenda-hide-tags-regexp "Investments")
                       (org-super-agenda-groups
                        '((:name none
-                                :and (:tag "Retirement" :scheduled nil))
+                                :and (:tag "Investments" :scheduled nil))
                          (:discard (:anything t))))))
             (todo "" ((org-agenda-overriding-header "Inbox")
                       (org-agenda-files `(,org-default-notes-file)))))))))

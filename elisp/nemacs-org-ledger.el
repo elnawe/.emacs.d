@@ -90,6 +90,8 @@ pressing a key."
            (keyboard-quit)))))
 
 (custom-set-faces
+ `(org-level-1
+   ((t (:height 1.0))))
  `(nemacs-org-ledger-title
    ((t (:background "black" :bold t
                       :box (:color "black" :line-width 6)

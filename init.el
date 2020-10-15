@@ -22,8 +22,11 @@
                 "packages.el"
                 "keybindings.el"
                 "hooks.el"
-                "theme.el"))
+                "theme.el"
+                "setup/setup.el"))
   (load (concat user-emacs-directory file)))
+
+(nemacs-start-setup)
 
 (add-hook 'after-init-hook
           #'(lambda ()
@@ -36,4 +39,6 @@
                     gc-cons-percentage 0.1)
 
               (require 'nemacs-ensure-system)
-              (nemacs-ensure-system-check-errors)))
+              (nemacs-ensure-system-check-errors)
+
+              (add-to-list 'default-frame-alist '(fullscreen . maximized))))
