@@ -3,19 +3,12 @@
   ;; a function to make it so I can add new entries to other calendars.
   ;; TODO: Add new capture template for tech specs
 
-  (require 'idle-org-agenda)
   (require 'org)
   (require 'org-agenda)
   (require 'org-bullets)
   (require 'org-capture)
   (require 'org-id)
   (require 'org-super-agenda)
-
-  (with-eval-after-load 'idle-org-agenda
-    (setq idle-org-agenda-interval 3000
-          idle-org-agenda-key "d")
-
-    (idle-org-agenda-mode))
 
   (with-eval-after-load 'org
     (require 'nemacs-org-ledger)
