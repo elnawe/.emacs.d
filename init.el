@@ -1,6 +1,6 @@
 ;;; init.el --- NEMACS Initialization File.
 
-;; Copyright (C) 2017 ~ 2019 Nahuel Jesús Sacchetti <me@nsacchetti.com>
+;; Copyright (C) 2017 ~ 2021 Nahuel Jesús Sacchetti <me@nsacchetti.com>
 
 ;; This program is free software; you can redistribute it and/or modify it under
 ;; the terms of the GNU General Public License as published by the Free Software
@@ -17,28 +17,137 @@
 
 ;;; Code:
 
-(dolist (file '("vars.el"
-                "preload.el"
-                "packages.el"
-                "keybindings.el"
-                "hooks.el"
-                "theme.el"
-                "setup/setup.el"))
-  (load (concat user-emacs-directory file)))
+(load (concat user-emacs-directory "core/core.el"))
 
-(nemacs-start-setup)
+(nemacs-initialize)
 
-(add-hook 'after-init-hook
-          #'(lambda ()
-              (dolist (module (directory-files nemacs-modules-dir))
-                (when (string-match (format "^\\(.+\\)\\.module\\.el$") module)
-                  (message "Loading " module)
-                  (load (concat nemacs-modules-dir module))))
+;;
+;;; FONTS
 
-              (setq gc-cons-threshold 16777216
-                    gc-cons-percentage 0.1)
+(set-fontset-font t 'unicode (font-spec :name "Envy Code R-12") nil)
+(set-face-font 'default "Envy Code R-12")
 
-              (require 'nemacs-ensure-system)
-              (nemacs-ensure-system-check-errors)
+;;
+;;; THEME
 
-              (add-to-list 'default-frame-alist '(fullscreen . maximized))))
+(use-package doom-themes
+  :custom
+  (doom-themes-enable-bold t)    ; if nil, bold is universally disabled
+  (doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  :config
+  (load-theme 'doom-oceanic-next t))
+
+;;
+;;; HELM
+
+(use-package helm
+  :preface
+  (defun nemacs-setup-helm-mode ()
+    "NEMACS Setup: Run this function in `helm-mode-hook'."
+    (setq-local line-spacing 0.2))
+  :bind
+  (([remap find-file]                . helm-find-files)
+   ([remap execute-extended-command] . helm-M-x)
+   ([remap switch-to-buffer]         . helm-mini)
+   ([remap occur]                    . helm-occur)
+   ([remap apropos-command]          . helm-apropos)
+   ([remap yank-pop]                 . helm-show-kill-ring)
+   :map helm-find-files-map
+   ("C-<backspace>" . backward-kill-word)
+   :map helm-map
+   ("TAB" . helm-maybe-exit-minibuffer)
+   ("C-<backspace>" . backward-kill-word))
+  :hook
+  (helm-major-mode . nemacs-setup-helm-mode)
+  :custom
+  (helm-boring-buffer-regexp-list
+   '(;; Helm buffers
+     "\\` " "\\*helm" "\\*helm-mode"
+     ;; Emacs buffers
+     "\\*Echo Area" "\\*Minibuf" "\\*Compile-Log\\*"
+     "\\*Backtrace\\*" "\\*dashboard\\*" "\\*scratch\\*"
+     "\\*Help\\*" "tramp/.+" "\\*Flycheck error"
+     "\\*Messages\\*" "\\*.+(.+)" "elpa/.+"
+     ;; Magit buffers
+     "\\*magit-process:" "\\*magit-diff:")
+   helm-dwim-target 'completion
+   helm-echo-input-in-header-line t
+   helm-ff-skip-boring-files t
+   helm-reuse-last-window-split-state t)
+  :config
+  (require 'helm-config)
+
+  (helm-mode t))
+
+;;
+;;; MAGIT
+
+(use-package magit
+  :custom
+  (transient-history-file (concat nemacs-cache-dir "transient/history.el")))
+
+;;
+;;; PROJECTILE
+
+(use-package projectile
+  :custom
+  ;; Enable cache
+  (projectile-enabled-caching t)
+  (projectile-cache-file (expand-file-name "projectile.cache" nemacs-cache-dir))
+  (projectile-known-projects-file (expand-file-name "projectile-bookmarks" nemacs-cache-dir))
+  ;; Ignore directories
+  (projectile-globally-ignored-directories '(".idea"
+                                             ".ensime_cache"
+                                             ".eunit"
+                                             ".git"
+                                             ".hg"
+                                             ".fslckout"
+                                             "_FOSSIL_"
+                                             ".bzr"
+                                             "_darcs"
+                                             ".tox"
+                                             ".svn"
+                                             ".stack-work"
+                                             "node_modules"
+                                             ".local"))
+  :config
+  ;; Install helm-projectile
+  (use-package helm-projectile
+    :config
+    (helm-projectile-on))
+
+  ;; Define `projectile' master key
+  (define-key projectile-mode-map (kbd "C-c p") #'projectile-command-map)
+
+  ;; Ignore directories
+  (projectile-mode))
+
+;;
+;;; VTERM
+
+(use-package vterm
+  :config
+  ;; Check for `cmake' system dependency before continuing.
+  (nemacs-ensure-system-package "cmake" t)
+
+  (defun nemacs-create-switch-to-vterm ()
+    "Switch to `vterm' buffer if exists.
+If not, automatically creates one."
+    (interactive)
+    (if (buffer-live-p (get-buffer "vterm"))
+        (switch-to-buffer "vterm")
+      (vterm)))
+
+  (defun nemacs-create-switch-to-vterm-other-window ()
+    "Split window and switch to `vterm' buffer if exists.
+If not, automatically creates one."
+    (interactive)
+    (if (buffer-live-p (get-buffer "vterm"))
+        (progn (nemacs-create-window-right-and-switch)
+               (switch-to-buffer "vterm"))
+      (vterm-other-window)))
+
+  (global-set-key (kbd "C-x t")
+                  #'nemacs-create-switch-to-vterm)
+  (global-set-key (kbd "C-x T")
+                  #'nemacs-create-switch-to-vterm-other-window))
