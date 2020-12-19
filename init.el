@@ -87,6 +87,24 @@
   (transient-history-file (concat nemacs-cache-dir "transient/history.el")))
 
 ;;
+;;; PROGRAMMING
+(use-package prog-mode
+  :ensure nil
+  :custom
+  ;; Html tab width
+  (sgml-offset 4)
+  :config
+  (use-package js2-mode
+    :custom
+    (js-indent-level 4))
+
+  (use-package json-mode)
+
+  (use-package typescript-mode
+    :custom
+    (typescript-indent-level 4)))
+
+;;
 ;;; PROJECTILE
 
 (use-package projectile
@@ -126,6 +144,9 @@
 ;;; VTERM
 
 (use-package vterm
+  :bind
+  (("C-x t" . nemacs-create-switch-to-vterm)
+   ("C-x T" . nemacs-create-switch-to-vterm-other-window))
   :config
   ;; Check for `cmake' system dependency before continuing.
   (nemacs-ensure-system-package "cmake" t)
@@ -145,9 +166,4 @@ If not, automatically creates one."
     (if (buffer-live-p (get-buffer "vterm"))
         (progn (nemacs-create-window-right-and-switch)
                (switch-to-buffer "vterm"))
-      (vterm-other-window)))
-
-  (global-set-key (kbd "C-x t")
-                  #'nemacs-create-switch-to-vterm)
-  (global-set-key (kbd "C-x T")
-                  #'nemacs-create-switch-to-vterm-other-window))
+      (vterm-other-window))))
