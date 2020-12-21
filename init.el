@@ -37,6 +37,10 @@
   :config
   (load-theme 'doom-oceanic-next t))
 
+;;;
+;;   PACKAGES
+;;;
+
 ;;
 ;;; HELM
 
@@ -88,12 +92,42 @@
 
 ;;
 ;;; PROGRAMMING
+
 (use-package prog-mode
   :ensure nil
   :custom
   ;; Html tab width
   (sgml-offset 4)
   :config
+  (use-package cc-mode
+    ;; Programming mode for C language
+    :ensure nil
+    :preface
+    ;; Build and run C projects with their Makefile
+    ;; NOTE: This code is sensible to break as it's not checking for
+    ;;       an actual Makefile or even if the project is in the
+    ;;       projectile database. However, it works for now.
+    (defun nemacs-cc-compile ()
+      (interactive)
+      (compile (concat "cd " (projectile-project-root) " && make -k build")))
+
+    (defun nemacs-cc-run ()
+      (interactive)
+      (compile (concat "cd " (projectile-project-root) " && make run")))
+
+    (defun nemacs-cc-compile-and-run ()
+      (interactive)
+      (compile
+       (concat
+        "cd " (projectile-project-root) " && make -k build && make run")))
+    :bind
+    (:map c-mode-map
+          ("<f6>" . nemacs-cc-compile)
+          ("<f7>" . nemacs-cc-run)
+          ("<f8>" . nemacs-cc-compile-and-run))
+    :custom
+    (c-basic-offset 4))
+
   (use-package js2-mode
     :custom
     (js-indent-level 4))
