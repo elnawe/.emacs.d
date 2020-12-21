@@ -80,8 +80,8 @@
 ;;
 ;;; CURSOR
 
-;; Don't blink cursor since it may affect some minor modes.
-(blink-cursor-mode -1)
+;; Blink cursor, it makes life simpler. This might conflict with some minor modes.
+(blink-cursor-mode 1)
 ;; Don't blink the paren matching at point.
 (setq blink-matching-paren nil)
 ;; Don't stretch the cursor to fit wide characters.
