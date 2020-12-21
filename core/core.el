@@ -76,8 +76,9 @@ Emacs or specific packages. This data should not be deleted.")
 ;;
 ;;; NEMACS CORE
 
-;; Lockfiles
-(setq create-lockfiles nil)
+;; Lockfiles and backup files
+(setq create-lockfiles nil
+      make-backup-files nil)
 ;; Custom file
 (setq-default custom-file (expand-file-name "custom.el" nemacs-etc-dir))
 ;; Load all the core libraries.
