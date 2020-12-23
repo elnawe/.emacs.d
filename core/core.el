@@ -86,6 +86,9 @@ Emacs or specific packages. This data should not be deleted.")
 (load (concat user-emacs-directory "core/interface.el"))
 (load (concat user-emacs-directory "core/packages.el"))
 (load (concat user-emacs-directory "core/utils/utils.el"))
+;; Do not close Emacs on C-x C-c
+(global-key-binding (kbd "C-x C-c") #'ignore)
+(define-key global-map (kbd "C-x C-c") #'ignore)
 
 ;;
 ;;; RUN NEMACS
