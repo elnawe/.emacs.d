@@ -30,12 +30,18 @@
 ;;
 ;;; THEME
 
-(use-package doom-themes
-  :custom
-  (doom-themes-enable-bold t)    ; if nil, bold is universally disabled
-  (doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  :config
-  (load-theme 'doom-oceanic-next t))
+(set-face-attribute 'font-lock-builtin-face nil :foreground "#DAB98F")
+(set-face-attribute 'font-lock-comment-face nil :foreground "gray50")
+(set-face-attribute 'font-lock-constant-face nil :foreground "#808bed")
+(set-face-attribute 'font-lock-doc-face nil :foreground "gray50")
+(set-face-attribute 'font-lock-function-name-face nil :foreground "#cfbfad")
+(set-face-attribute 'font-lock-keyword-face nil :foreground "DarkGoldenrod3")
+(set-face-attribute 'font-lock-string-face nil :foreground "#808bed")
+(set-face-attribute 'font-lock-type-face nil :foreground "burlywood3")
+(set-face-attribute 'font-lock-variable-name-face nil :foreground "burlywood3")
+(set-foreground-color "#cfbfad")
+(set-background-color "#1e1e27")
+(set-cursor-color "#40FF40")
 
 ;;;
 ;;   PACKAGES
@@ -104,22 +110,26 @@
     :ensure nil
     :preface
     ;; Build and run C projects with their Makefile
-    ;; NOTE: This code is sensible to break as it's not checking for
-    ;;       an actual Makefile or even if the project is in the
-    ;;       projectile database. However, it works for now.
     (defun nemacs-cc-compile ()
       (interactive)
-      (compile (concat "cd " (projectile-project-root) " && make -k build")))
+      (let ((cd-project-dir (concat "cd " (projectile-project-root))))
+        (if IS-LINUX
+            (compile (concat cd-project-dir " && ./build.sh"))
+          (compile (concat cd project-dir " && build.bat")))))
 
     (defun nemacs-cc-run ()
       (interactive)
-      (compile (concat "cd " (projectile-project-root) " && make run")))
+      (let ((cd-project-dir (concat "cd " (projectile-project-root)))
+            (display-buffer-alist (list (cons "\\*Async Shell Command\\*.*"
+                                        (cons #'display-buffer-no-window nil)))))
+        (if IS-LINUX
+            (async-shell-command (concat cd-project-dir " && ./run.sh"))
+          (async-shell-command (concat cd project-dir " && run.bat")))))
 
     (defun nemacs-cc-compile-and-run ()
       (interactive)
-      (compile
-       (concat
-        "cd " (projectile-project-root) " && make -k build && make run")))
+      (nemacs-cc-compile)
+      (nemacs-cc-run))
     :bind
     (:map c-mode-map
           ("<f6>" . nemacs-cc-compile)
@@ -136,7 +146,9 @@
 
   (use-package typescript-mode
     :custom
-    (typescript-indent-level 4)))
+    (typescript-indent-level 4)
+    :custom-face
+    (typescript-this-face ((t (:inherit 'font-lock-builtin-face))))))
 
 ;;
 ;;; PROJECTILE
@@ -160,6 +172,7 @@
                                              ".tox"
                                              ".svn"
                                              ".stack-work"
+                                             "angle-template"
                                              "node_modules"
                                              ".local"))
   :config
@@ -178,6 +191,7 @@
 ;;; VTERM
 
 (use-package vterm
+  :if IS-LINUX
   :bind
   (("C-x t" . nemacs-create-switch-to-vterm)
    ("C-x T" . nemacs-create-switch-to-vterm-other-window))
