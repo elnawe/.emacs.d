@@ -39,6 +39,7 @@
 (set-face-attribute 'font-lock-string-face nil :foreground "#808bed")
 (set-face-attribute 'font-lock-type-face nil :foreground "burlywood3")
 (set-face-attribute 'font-lock-variable-name-face nil :foreground "burlywood3")
+(set-face-attribute 'fringe nil :background "#191920")
 (set-foreground-color "#cfbfad")
 (set-background-color "#1e1e27")
 (set-cursor-color "#40FF40")
