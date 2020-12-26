@@ -154,6 +154,7 @@ fundamental-mode) for performance sake."
 
 ;;
 ;;; PROGRAMMING
+
 (setq-default fill-column 80
 	          indent-tabs-mode nil
 	          mouse-yank-at-point t
@@ -162,3 +163,20 @@ fundamental-mode) for performance sake."
 	          tab-width 4
 	          tabify-regexp "^\t* [ \t]+"
 	          truncate-lines nil)
+
+;; Add TODOs, NOTEs and IMPORTANT keywords
+(setq fixme-modes '(c++-mode c-mode emacs-lisp-mode))
+(make-face 'font-lock-fixme-face)
+(make-face 'font-lock-important-face)
+(make-face 'font-lock-note-face)
+(mapc (lambda (mode)
+        (font-lock-add-keywords
+         mode
+         '(("\\<\\(TODO\\)" 1 'font-lock-fixme-face t)
+           ("\\<\\(IMPORTANT\\)" 1 'font-lock-important-face t)
+           ("\\<\\(NOTE\\)" 1 'font-lock-note-face t))))
+      fixme-modes)
+;; Temporary face. Change this face within your theme configuration.
+(modify-face 'font-lock-fixme-face "Red" nil nil t nil t nil nil)
+(modify-face 'font-lock-important-face "Blue" nil nil t nil t nil nil)
+(modify-face 'font-lock-note-face "Dark Green" nil nil t nil t nil nil)
