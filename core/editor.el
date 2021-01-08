@@ -165,7 +165,12 @@ fundamental-mode) for performance sake."
 	          truncate-lines nil)
 
 ;; Add TODOs, NOTEs and IMPORTANT keywords
-(setq fixme-modes '(c++-mode c-mode emacs-lisp-mode))
+(setq fixme-modes '(c++-mode
+                    c-mode
+                    emacs-lisp-mode
+                    js2-mode
+                    typescript-mode
+                    rjsx-mode))
 (make-face 'font-lock-fixme-face)
 (make-face 'font-lock-important-face)
 (make-face 'font-lock-note-face)

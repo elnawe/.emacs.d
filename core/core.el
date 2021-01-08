@@ -89,6 +89,9 @@ Emacs or specific packages. This data should not be deleted.")
 ;; Do not close Emacs on C-x C-c
 (global-key-binding (kbd "C-x C-c") #'ignore)
 (define-key global-map (kbd "C-x C-c") #'ignore)
+;; Do not suspend Emacs on C-z or C-x C-z
+(define-key global-map (kbd "C-z") #'ignore)
+(define-key global-map (kbd "C-x C-z") #'ignore)
 ;; Ask for `y-or-n' instead of `yes-or-no'.
 (fset #'yes-or-no-p #'y-or-n-p)
 

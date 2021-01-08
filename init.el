@@ -31,6 +31,7 @@
 (when IS-WINDOWS
   (set-fontset-font t 'unicode (font-spec :name "DejaVu Sans Mono-12") nil)
   (set-face-font 'default "DejaVu Sans Mono-12"))
+
 ;;
 ;;; THEME
 
@@ -273,6 +274,7 @@
           ("<f8>" . nemacs-cc-compile-and-run)
           ("C-m"  . newline-and-indent))
     :hook
+    (cc-mode  . nemacs-c++-hook)
     (c++-mode . nemacs-c++-hook)
     :custom
     (c-basic-offset 4))
@@ -286,6 +288,9 @@
   (use-package typescript-mode
     :custom
     (typescript-indent-level 4))
+
+  (use-package rjsx-mode
+    :mode "/feedback-analysis/"))
 
 ;;
 ;;; PROJECTILE
