@@ -290,7 +290,10 @@
     (typescript-indent-level 4))
 
   (use-package rjsx-mode
-    :mode "/feedback-analysis/"))
+    :mode "/feedback-analysis/"
+    :custom
+    (sgml-basic-offset 4)
+    (js-indent-level 4)))
 
 ;;
 ;;; PROJECTILE
