@@ -168,6 +168,8 @@
   :config
   (require 'helm-config)
 
+  (use-package helm-ag)
+
   (helm-mode t))
 
 ;;
