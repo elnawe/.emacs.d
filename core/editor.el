@@ -147,7 +147,7 @@ fundamental-mode) for performance sake."
 (show-paren-mode t)
 ;; Revert file to newest version if saved from another system (I.e. changes from VCS).
 (global-auto-revert-mode t)
-;; Jump word by word instead of jumping the whole block.
+;; Jump subwords.
 (global-subword-mode t)
 ;; Delete selection when overriden by new code.
 (delete-selection-mode t)

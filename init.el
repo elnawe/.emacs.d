@@ -42,7 +42,7 @@
   (zenburn-scale-outline-headlines nil)
   (zenburn-override-colors-alist
    '(;; background
-     ("zenburn-bg"      . "#2A282A")
+     ("zenburn-bg"      . "#222022")
      ;; foreground
      ("zenburn-fg"      . "#D0BF8F")
      ;; mode-line
@@ -77,6 +77,12 @@
                                            :box nil))))
      `(org-level-1 ((t (:foreground ,zenburn-fg+2 :bold t))))
 
+     ;; ERC
+     `(erc-current-nick-face ((t (:foreground ,zenburn-fg+1))))
+     `(erc-input-face ((t (:foreground ,zenburn-bg+2))))
+     `(erc-nick-default-face ((t (:foreground ,zenburn-blue))))
+     `(erc-prompt-face ((t (:foreground ,zenburn-yellow))))
+
      ;; Search
      `(anzu-mode-line ((t (:foreground ,zenburn-bg-2))))
 
@@ -109,7 +115,14 @@
      ;; Todos, Importants and Notes
      `(font-lock-fixme-face ((t (:foreground ,zenburn-red-2 :bold t :underline t))))
      `(font-lock-important-face ((t (:foreground ,zenburn-blue :bold t :underline t))))
-     `(font-lock-note-face ((t (:foreground ,zenburn-green :bold t :underline t)))))
+     `(font-lock-note-face ((t (:foreground ,zenburn-green :bold t :underline t))))
+
+     ;; Web-mode
+     `(web-mode-function-name-face ((t (:foreground ,zenburn-fg))))
+     `(web-mode-html-attr-name-face ((t (:foreground ,zenburn-fg))))
+     `(web-mode-html-tag-face ((t (:foreground ,zenburn-fg))))
+     `(web-mode-block-delimiter-face ((t (:foreground ,zenburn-fg))))
+     `(web-mode-html-tag-bracket-face ((t (:foreground ,zenburn-fg)))))
 
     ;; Extra borders for the mode-line
     (set-face-attribute 'mode-line nil
@@ -127,6 +140,50 @@
 (use-package anzu
   :config
   (global-anzu-mode +1))
+
+;;
+;;; ERC
+
+(use-package erc
+  :commands (erc erc-tls)
+  :preface
+  (defun nemacs-toggle-chat ()
+    (interactive)
+    (let ((chat-buffer (erc-get-buffer "#nawetimebomb"))
+          (previous-buffer (current-buffer)))
+      (when (not (buffer-live-p chat-buffer))
+        (nemacs-irc)
+        (switch-to-buffer previous-buffer))
+
+      (if nemacs-chat-live-enabled
+          (progn (delete-other-windows)
+                 (setq nemacs-chat-live-enabled nil))
+        (progn (delete-other-windows)
+               (split-window-right 120)
+               (other-window 1)
+               (switch-to-buffer chat-buffer)
+               (other-window 1)
+               (setq nemacs-chat-live-enabled t)))))
+
+  (defun nemacs-irc ()
+    (interactive)
+    (progn
+      (erc-tls :server "irc.chat.twitch.tv"
+               :port 6697
+               :nick "NaweTimebomb"
+               :password "oauth:9qwdqr2977fmf0lflgyrnjn7z0clls")
+      (sleep-for 3)
+      (erc-join-channel "nawetimebomb")
+      (sleep-for 2)
+      (delete-other-windows)))
+  :bind
+  (("C-c t" . nemacs-toggle-chat)
+   ("<f5>" . nemacs-toggle-chat))
+  :config
+  (erc-fill-mode -1)
+  :custom
+  (nemacs-chat-live-enabled nil)
+  (erc-hide-timestamps t))
 
 ;;
 ;;; HELM
@@ -152,7 +209,9 @@
   (helm-major-mode . nemacs-setup-helm-mode)
   :custom
   (helm-boring-buffer-regexp-list
-   '(;; Helm buffers
+   '(;; ERC buffers
+     "\\irc.*"
+     ;; Helm buffers
      "\\` " "\\*helm" "\\*helm-mode"
      ;; Emacs buffers
      "\\*Echo Area" "\\*Minibuf" "\\*Compile-Log\\*"
@@ -236,7 +295,17 @@
       "NEMACS' C-is-fun Style mode based on Casey Muratori's style.")
 
     (defun nemacs-c++-hook ()
+      (defun nemacs-tab-dwin ()
+        (interactive)
+        "Autocomplete or tab, depending on the current position of the cursor"
+        (if (or (eq 32 (char-before))
+                (eq 10 (char-before)))
+            (c-indent-line-or-region)
+          (call-interactively 'dabbrev-expand)))
+
       (c-add-style "C-is-Fun" nemacs-c-is-fun-style t)
+
+      (define-key c++-mode-map "\t" 'nemacs-tab-dwin)
 
       (setq tab-width 4
             indent-tabs-mode nil)
@@ -276,6 +345,7 @@
           ("<f8>" . nemacs-cc-compile-and-run)
           ("C-m"  . newline-and-indent))
     :hook
+    (c-mode   . nemacs-c++-hook)
     (cc-mode  . nemacs-c++-hook)
     (c++-mode . nemacs-c++-hook)
     :custom
@@ -285,17 +355,28 @@
     :custom
     (js-indent-level 4))
 
-  (use-package json-mode)
+  (use-package json-mode
+    :mode "\\.json\\'")
+
+  (use-package markdown-mode+
+    :mode (("\\.md\\'"  . markdown-mode)
+           ("\\.mdx\\'" . markdown-mode)))
+
+  (use-package scss-mode
+    :mode (("\\.scss\\'" . scss-mode)))
 
   (use-package typescript-mode
     :custom
     (typescript-indent-level 4))
 
   (use-package rjsx-mode
-    :mode "/feedback-analysis/"
+    :mode (("/feedback-analysis/" . rjsx-mode))
     :custom
     (sgml-basic-offset 4)
-    (js-indent-level 4)))
+    (js-indent-level 4))
+
+  (use-package web-mode
+    :mode (("\\.tsx\\'" . web-mode))))
 
 ;;
 ;;; PROJECTILE
